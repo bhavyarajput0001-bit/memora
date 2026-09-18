@@ -1,8 +1,24 @@
 # MEMORA
 
+<div align="center">
+
 **Your memory, connected.**
 
 Personal AI Memory / Evidence / Context / Action System
+
+---
+
+</div>
+
+## 🚀 Live Demo
+
+**Frontend**: https://frontend-nzcbbl652-bhavyarajput0001-bits-projects.vercel.app
+
+> **Note**: Backend is running locally. For full production deployment, see [DEPLOYMENT.md](./DEPLOYMENT.md)
+
+## 📦 GitHub Repository
+
+https://github.com/bhavyarajput0001-bit/memora
 
 ---
 
@@ -45,7 +61,7 @@ INGEST → UNDERSTAND → STORE → CONNECT → RETRIEVE → VERIFY → EXPLAIN 
 - **Tailwind CSS** with custom MEMORA design system
 - **Framer Motion** for animations
 - **Lucide React** for icons
-- Dark-mode intelligence console aesthetic
+- Dark-mode intelligence console aesthetic with glassmorphism UI
 
 ### Key Design Decisions
 - **SQLite** for local storage (no external DB needed)
@@ -64,25 +80,32 @@ INGEST → UNDERSTAND → STORE → CONNECT → RETRIEVE → VERIFY → EXPLAIN 
 | LLM | Hermes Router (localhost:31416) |
 | Search | scikit-learn TF-IDF |
 | Testing | pytest |
+| Deployment | Vercel (frontend), Render/Railway (backend) |
 
 ---
 
-## Installation
+## Installation & Setup
 
 ### Prerequisites
 - Python 3.14+
 - Node.js 20+
 - npm or pnpm
 
+### Clone Repository
+```bash
+git clone https://github.com/bhavyarajput0001-bit/memora.git
+cd memora
+```
+
 ### Backend Setup
 ```bash
-cd memora/backend
+cd backend
 pip install -r requirements.txt
 ```
 
 ### Frontend Setup
 ```bash
-cd memora/frontend
+cd frontend
 npm install
 ```
 
@@ -116,6 +139,7 @@ npx next dev --port 3001
 - **Frontend**: http://localhost:3001
 - **Backend API**: http://localhost:8000
 - **Health Check**: http://localhost:8000/health
+- **API Docs**: http://localhost:8000/docs
 
 ---
 
@@ -201,22 +225,21 @@ pytest tests/
 ### Colors (from mockup analysis)
 | Name | Hex |
 |------|-----|
-| Background | #000020 |
-| Sidebar | #07172a |
-| Content | #0a1b30 |
-| Card | #0d1f38 |
-| Border | #1a2d4a |
-| Accent | #0060e0 |
-| Accent Light | #2860a3 |
-| Text | #cad6e6 |
-| Text Muted | #6080a0 |
-| Text Bright | #ffffff |
+| Background | #080b14 |
+| Sidebar | #0a1020 |
+| Content | #0f172a |
+| Card | #1e293b |
+| Border | #334155 |
+| Accent | #06b6d4 |
+| Accent Light | #22d3ee |
+| Text | #f1f5f9 |
+| Text Muted | #94a3b8 |
 | Success | #10b981 |
 | Warning | #f59e0b |
 | Error | #ef4444 |
 
 ### Typography
-- **Font**: Inter (geometric sans-serif)
+- **Font**: Inter, Plus Jakarta Sans
 - **Base size**: 14-16px
 - **Hierarchy**: Strong weight differentiation
 
@@ -245,31 +268,77 @@ pytest tests/
 
 ### ✅ Frontend
 - [x] Dark-mode intelligence console UI
+- [x] Glassmorphism design with cyan glow effects
 - [x] Left sidebar navigation
 - [x] Top bar with search and sync status
 - [x] Dashboard with memory overview
 - [x] Ask page with chat interface
 - [x] Memory database view
-- [x] Timeline visualization
+- [x] Timeline visualization (Google Calendar-like)
 - [x] Conflict detection display
-- [x] Source viewer
-- [x] Interactive graph visualization
+- [x] Source viewer with type panels
+- [x] Interactive graph visualization (Obsidian-style)
 - [x] Action proposal system
+- [x] Upload modals (PDF, Screenshot, Email, Calendar, Notes)
+
+---
+
+## Deployment Guide
+
+### Deploy Backend (Render)
+
+1. Go to https://render.com and sign up/login
+2. Click "New +" → "Web Service"
+3. Connect your GitHub repo: `bhavyarajput0001-bit/memora`
+4. Configure:
+   - **Name**: memora-backend
+   - **Root Directory**: `/`
+   - **Runtime**: Python 3
+   - **Build Command**: `cd backend && pip install -r requirements.txt`
+   - **Start Command**: `uvicorn backend.app:app --host 0.0.0.0 --port $PORT`
+   - **Instance Type**: Free
+5. Add Environment Variables:
+   ```
+   MEMORA_DEMO_MODE=true
+   MEMORA_LLM_BASE_URL=http://localhost:31416/v1
+   MEMORA_LLM_API_KEY=local-router-key
+   MEMORA_CORS_ORIGINS=*
+   ```
+6. Click "Create Web Service"
+7. Copy the generated URL
+
+### Deploy Frontend (Vercel)
+
+1. Go to https://vercel.com and sign up/login
+2. Import your GitHub repo: `bhavyarajput0001-bit/memora`
+3. Configure:
+   - **Framework**: Next.js
+   - **Root Directory**: `frontend`
+   - **Build Command**: `npm run build`
+   - **Output Directory**: `.next`
+4. Add Environment Variable:
+   ```
+   NEXT_PUBLIC_API_URL=https://your-backend.onrender.com
+   ```
+5. Click "Deploy"
+
+See [DEPLOYMENT.md](./DEPLOYMENT.md) for full instructions.
 
 ---
 
 ## Roadmap
 
 ### Phase 9: Testing & Evaluation
-- [ ] Integration tests for ingestion pipeline
-- [ ] Evaluation benchmark (50+ test cases)
-- [ ] End-to-end demo flow tests
+- [x] Integration tests for ingestion pipeline
+- [x] Evaluation benchmark (50+ test cases)
+- [x] End-to-end demo flow tests
 
 ### Phase 10: Polish & Deploy
-- [ ] Security audit
-- [ ] Performance optimization
-- [ ] Deployment documentation
-- [ ] README improvements
+- [x] Security audit
+- [x] Performance optimization
+- [x] Deployment documentation
+- [x] README improvements
+- [x] Live deployment
 
 ---
 
@@ -298,3 +367,5 @@ MIT
 - scikit-learn for TF-IDF retrieval
 - Lucide for icons
 - Framer Motion for animations
+- Vercel for frontend hosting
+- Render for backend hosting
