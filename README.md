@@ -12,7 +12,7 @@ Personal AI Memory / Evidence / Context / Action System
 
 ## 🚀 Live Demo
 
-**Frontend**: https://frontend-nzcbbl652-bhavyarajput0001-bits-projects.vercel.app
+**Frontend (Production)**: https://frontend-qgpmcv3ya-bhavyarajput0001-bits-projects.vercel.app
 
 > **Note**: Backend is running locally. For full production deployment, see [DEPLOYMENT.md](./DEPLOYMENT.md)
 
