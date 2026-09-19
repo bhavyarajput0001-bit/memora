@@ -9,11 +9,11 @@
   "routes": [
     {
       "src": "/api/(.*)",
-      "dest": "/frontend/app/api/[[...route]]/route.ts"
+      "dest": "/frontend/app/api/$1/route.ts"
     },
     {
       "src": "/health",
-      "dest": "/frontend/app/api/[[...route]]/route.ts"
+      "dest": "/frontend/app/api/health/route.ts"
     },
     {
       "src": "/(.*)",
