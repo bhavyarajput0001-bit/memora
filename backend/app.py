@@ -38,6 +38,15 @@ async def lifespan(app: FastAPI):
     init_db()
     logger.info("Database initialized successfully")
     
+    # Warm up embedding cache
+    logger.info("Warming up embedding cache...")
+    try:
+        from backend.services.retrieval import warmup_cache
+        count = warmup_cache()
+        logger.info(f"Embedding cache warmed: {count} chunks cached")
+    except Exception as e:
+        logger.warning(f"Failed to warm up cache: {e}")
+    
     # Load demo data if enabled
     if DEMO_MODE:
         logger.info("Loading demo data...")

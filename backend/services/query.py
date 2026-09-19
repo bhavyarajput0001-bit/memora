@@ -13,16 +13,44 @@ Architecture:
   -> ANSWER + SOURCES
 """
 import json
+import logging
 import time
 from datetime import datetime
 from typing import Optional
+from functools import lru_cache
 
 from backend.db import get_session
 from backend.models import Document, Fact, Entity, Event
 from backend.services import retrieval
 from backend.services import conflict as conflict_service
-from backend.llm import chat
+from backend.llm import chat, LLMError
 from backend.utils import generate_id, utcnow, truncate_text
+
+logger = logging.getLogger(__name__)
+
+# Query result cache (in-memory, TTL-based)
+_query_cache: dict[str, tuple[float, dict]] = {}
+QUERY_CACHE_TTL = 120  # seconds
+
+
+def _get_cached_query(query: str) -> Optional[dict]:
+    """Get cached query result if still valid."""
+    if query in _query_cache:
+        timestamp, result = _query_cache[query]
+        if time.time() - timestamp < QUERY_CACHE_TTL:
+            logger.info(f"Query cache hit: {query[:50]}...")
+            return result
+        del _query_cache[query]
+    return None
+
+
+def _set_cached_query(query: str, result: dict) -> None:
+    """Cache a query result."""
+    _query_cache[query] = (time.time(), result)
+    # Evict old entries if cache gets too large
+    if len(_query_cache) > 100:
+        oldest = min(_query_cache, key=lambda k: _query_cache[k][0])
+        del _query_cache[oldest]
 
 
 QUERY_INTENT_PROMPT = """You are MEMORA's query intent engine. Analyze the user's question and return a structured intent object.
@@ -66,15 +94,25 @@ RULES:
 
 
 def query(query_text: str, user_id: Optional[str] = None) -> dict:
-    """Execute a full query pipeline."""
+    """Execute a full query pipeline with caching."""
     start_time = time.time()
     request_id = generate_id("req_")
     
+    # Normalize query for cache key
+    cache_key = query_text.strip().lower()
+    
+    # Check query cache first
+    cached = _get_cached_query(cache_key)
+    if cached:
+        logger.info(f"Query cache hit: {query_text[:50]}...")
+        cached["retrieval_duration_ms"] = 0  # Cache hit = instant
+        return cached
+    
     try:
-        # Step 1: Query Understanding
-        intent = _understand_intent(query_text)
+        # Step 1: Fast intent understanding (keyword-based, no LLM)
+        intent = _simple_intent_detection(query_text)
         
-        # Step 2: Hybrid Retrieval
+        # Step 2: Hybrid Retrieval (cached embeddings)
         evidence = retrieval.hybrid_search(
             query=query_text,
             limit=15,
@@ -96,7 +134,7 @@ def query(query_text: str, user_id: Optional[str] = None) -> dict:
         # Step 6: Evidence Selection
         selected_evidence = _select_evidence(evidence, facts, query_text)
         
-        # Step 7: LLM Reasoning
+        # Step 7: Generate answer (try LLM, fallback to rule-based)
         answer, confidence = _generate_answer(
             query_text, evidence, facts, conflicts, intent
         )
@@ -106,7 +144,7 @@ def query(query_text: str, user_id: Optional[str] = None) -> dict:
         
         duration_ms = (time.time() - start_time) * 1000
         
-        return {
+        result = {
             "request_id": request_id,
             "query": query_text,
             "intent": intent,
@@ -129,7 +167,13 @@ def query(query_text: str, user_id: Optional[str] = None) -> dict:
             "num_candidates": len(evidence),
             "suggested_actions": _suggest_actions(answer, intent),
         }
+        
+        # Cache the result (use normalized key)
+        _set_cached_query(cache_key, result)
+        
+        return result
     except Exception as e:
+        logger.error(f"Query failed: {e}", exc_info=True)
         return {
             "request_id": request_id,
             "query": query_text,
