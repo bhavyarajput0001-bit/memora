@@ -7,7 +7,7 @@ import json
 from pathlib import Path
 
 # Add backend to path
-BACKEND_DIR = Path(__file__).parent
+BACKEND_DIR = Path(__file__).parent.parent
 sys.path.insert(0, str(BACKEND_DIR))
 
 # Set environment variables
@@ -48,29 +48,29 @@ async def handler(event, context):
             response = JSONResponse(result)
             
         elif path == "/api/v1/memory/documents" and method == "GET":
-            from backend.services.memory import get_documents
-            result = get_documents()
-            response = JSONResponse(result)
+            from backend.api.routes.memory import get_documents
+            result = await get_documents()
+            response = JSONResponse(result.body if hasattr(result, 'body') else result)
             
         elif path == "/api/v1/memory/entities" and method == "GET":
-            from backend.services.memory import get_entities
-            result = get_entities()
-            response = JSONResponse(result)
+            from backend.api.routes.memory import get_entities
+            result = await get_entities()
+            response = JSONResponse(result.body if hasattr(result, 'body') else result)
             
         elif path == "/api/v1/memory/facts" and method == "GET":
-            from backend.services.memory import get_facts
-            result = get_facts()
-            response = JSONResponse(result)
+            from backend.api.routes.memory import get_facts
+            result = await get_facts()
+            response = JSONResponse(result.body if hasattr(result, 'body') else result)
             
         elif path == "/api/v1/graph/graph" and method == "GET":
-            from backend.api.routes.graph import get_graph
-            result = get_graph()
-            response = JSONResponse(result)
+            from backend.api.routes.graph import get_entity_graph
+            result = await get_entity_graph()
+            response = JSONResponse(result.body if hasattr(result, 'body') else result)
             
         elif path == "/api/v1/connectors/status" and method == "GET":
             from backend.connectors.manager import ConnectorManager
             manager = ConnectorManager()
-            result = manager.get_status()
+            result = manager.get_stats()
             response = JSONResponse(result)
             
         else:
