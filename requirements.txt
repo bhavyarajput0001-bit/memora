@@ -1,0 +1,21 @@
+# MEMORA - Vercel Serverless Deployment
+# Requirements for Vercel Python runtime (lightweight)
+
+fastapi==0.109.0
+uvicorn[standard]==0.27.0
+python-multipart==0.0.6
+sqlalchemy==2.0.25
+pydantic==2.5.3
+PyPDF2==3.0.1
+python-docx==1.1.0
+pandas==2.2.0
+openpyxl==3.1.2
+scikit-learn==1.4.0
+numpy==1.26.3
+aiofiles==23.2.1
+aiohttp==3.9.1
+httpx==0.26.0
+gunicorn==21.2.0
+
+# Note: sentence-transformers/torch NOT included for Vercel deployment
+# Uses TF-IDF + LLM reranking instead
