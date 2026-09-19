@@ -30,6 +30,7 @@ const navItems = [
   { href: "/conflicts", label: "Conflicts", icon: AlertTriangle },
   { href: "/sources", label: "Sources", icon: FileText },
   { href: "/graph", label: "Graph", icon: GitGraph },
+  { href: "/integrations", label: "Integrations", icon: Plug },
   { href: "/actions", label: "Actions", icon: CheckCircle },
 ];
 
