@@ -13,7 +13,7 @@ from fastapi.middleware.cors import CORSMiddleware
 
 from backend.config import CORS_ORIGINS, DEMO_MODE
 from backend.db import init_db
-from backend.api.routes import (
+from backend.api.routes import (\
     ingest_router,
     query_router,
     memory_router,
@@ -22,6 +22,8 @@ from backend.api.routes import (
     sources_router,
     actions_router,
     documents_router,
+    connectors_router,
+    graph_router,
 )
 
 logging.basicConfig(level=logging.INFO)
@@ -72,6 +74,8 @@ app.include_router(conflicts_router)
 app.include_router(sources_router)
 app.include_router(actions_router)
 app.include_router(documents_router)
+app.include_router(connectors_router)
+app.include_router(graph_router)
 
 
 @app.get("/health")
