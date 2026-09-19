@@ -4,11 +4,14 @@ Uses LLM for intelligent extraction with structured JSON output.
 Falls back to rule-based extraction when LLM is unavailable.
 """
 import json
+import logging
 from datetime import datetime, timezone
 from typing import Optional
 
 from backend.utils import generate_id, parse_date_flexible, utcnow
 from backend.llm import chat, LLMError
+
+logger = logging.getLogger(__name__)
 
 
 EXTRACTION_PROMPT = """You are MEMORA's extraction engine. Extract structured facts, entities, and events from the document text.
@@ -71,7 +74,11 @@ def extract_all(parsed_doc: dict) -> dict:
     try:
         result = _extract_with_llm(messages)
         return result
-    except LLMError:
+    except LLMError as e:
+        logger.warning("LLM extraction failed: %s, using fallback", e)
+        return _extract_fallback(parsed_doc)
+    except Exception as e:
+        logger.warning("Extraction error: %s, using fallback", e)
         return _extract_fallback(parsed_doc)
 
 
@@ -82,7 +89,7 @@ def _extract_with_llm(messages: list[dict]) -> dict:
         model="auto",
         temperature=0.1,
         max_tokens=4000,
-        timeout_s=120,
+        timeout_s=30,
     )
     content = response["choices"][0]["message"]["content"]
     try:

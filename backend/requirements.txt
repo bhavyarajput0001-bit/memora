@@ -14,3 +14,9 @@ aiofiles==23.2.1
 aiohttp==3.9.1
 httpx==0.26.0
 gunicorn==21.2.0
+
+# Embeddings (Phase 1 upgrade)
+torch==2.14.0
+sentence-transformers==3.0.1
+transformers==4.40.0
+huggingface-hub>=0.20.0

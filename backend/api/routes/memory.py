@@ -73,14 +73,54 @@ async def get_documents(limit: int = 20, offset: int = 0):
 
 
 @router.get("/entities")
-async def get_entities():
+async def get_entities(limit: int = 50):
     """Get all entities."""
-    entities = retrieval.get_entities()
-    return {"entities": entities, "count": len(entities)}
+    with get_session() as db:
+        entities = (
+            db.query(Entity)
+            .order_by(Entity.confidence.desc())
+            .limit(limit)
+            .all()
+        )
+        return {
+            "entities": [
+                {
+                    "id": e.id,
+                    "name": e.canonical_name,
+                    "entity_type": e.entity_type,
+                    "aliases": e.aliases_json,
+                    "sources": e.sources_json,
+                    "confidence": e.confidence,
+                }
+                for e in entities
+            ],
+            "count": len(entities),
+        }
 
 
 @router.get("/facts")
 async def get_facts(limit: int = 50):
     """Get facts."""
-    facts = retrieval.get_facts(limit=limit)
-    return {"facts": facts, "count": len(facts)}
+    with get_session() as db:
+        facts = (
+            db.query(Fact)
+            .order_by(Fact.observed_at.desc())
+            .limit(limit)
+            .all()
+        )
+        return {
+            "facts": [
+                {
+                    "id": f.id,
+                    "subject": f.subject,
+                    "predicate": f.predicate,
+                    "object": f.object,
+                    "confidence": f.confidence,
+                    "status": f.status,
+                    "observed_at": f.observed_at.isoformat() if f.observed_at else None,
+                    "effective_at": f.effective_at.isoformat() if f.effective_at else None,
+                }
+                for f in facts
+            ],
+            "count": len(facts),
+        }

@@ -15,7 +15,6 @@ from backend.parsers import get_parser
 from backend.utils import generate_id, file_hash, utcnow, normalize_whitespace
 from backend.services import chunker, extraction
 
-
 def detect_source_type(filename: str) -> Optional[str]:
     ext = os.path.splitext(filename)[1].lower()
     if ext in ALLOWED_EXTENSIONS:
@@ -74,8 +73,21 @@ def ingest(file_bytes: bytes, filename: str) -> dict:
     parsed["chunks"] = chunks
 
     # Extract entities, events, facts
-    extraction = extractor.extract_all(parsed)
-    parsed["extraction"] = extraction
+    extraction_result = extraction.extract_all(parsed)
+    parsed["extraction"] = extraction_result
+
+    # Generate embeddings for chunks (lazy — model loaded on first call)
+    try:
+        from backend.services.embeddings import encode_batch
+        chunk_texts = [c["text"][:256] for c in parsed.get("chunks", [])]
+        if chunk_texts:
+            embeddings = encode_batch(chunk_texts)
+            for i, chunk in enumerate(parsed.get("chunks", [])):
+                if i < len(embeddings):
+                    chunk.setdefault("metadata", {})["embedding_generated"] = True
+                    chunk["metadata"]["vector_dim"] = int(len(embeddings[i]))
+    except Exception as e:
+        parsed["_embedding_error"] = str(e)
 
     return parsed
 
@@ -126,6 +138,18 @@ def persist_document(parsed: dict) -> str:
 
         # Persist facts
         for fact in parsed.get("extraction", {}).get("facts", []):
+            observed_at = fact.get("observed_at")
+            effective_at = fact.get("effective_at")
+            if isinstance(observed_at, str):
+                try:
+                    observed_at = datetime.fromisoformat(observed_at.replace("Z", "+00:00"))
+                except (ValueError, AttributeError):
+                    observed_at = None
+            if isinstance(effective_at, str):
+                try:
+                    effective_at = datetime.fromisoformat(effective_at.replace("Z", "+00:00"))
+                except (ValueError, AttributeError):
+                    effective_at = None
             f = Fact(
                 id=fact["id"],
                 subject=fact["subject"],
@@ -133,8 +157,8 @@ def persist_document(parsed: dict) -> str:
                 object=fact["object"],
                 source_id=doc.id,
                 source_location=fact.get("source_location", {}),
-                observed_at=fact.get("observed_at"),
-                effective_at=fact.get("effective_at"),
+                observed_at=observed_at,
+                effective_at=effective_at,
                 confidence=fact.get("confidence", 0.8),
                 status=fact.get("status", "likely_current"),
                 relationship=fact.get("relationship"),
@@ -142,19 +166,41 @@ def persist_document(parsed: dict) -> str:
             )
             db.add(f)
 
-        # Persist events
+        # Persist events (skip if no valid dates)
         for evt in parsed.get("extraction", {}).get("events", []):
+            # Convert None/invalid dates to None for SQLite
+            start_at = evt.get("start_at")
+            end_at = evt.get("end_at")
+            observed_at = evt.get("observed_at")
+
+            # Parse date strings to datetime objects
+            if isinstance(start_at, str):
+                try:
+                    start_at = datetime.fromisoformat(start_at.replace("Z", "+00:00"))
+                except (ValueError, AttributeError):
+                    start_at = None
+            if isinstance(end_at, str):
+                try:
+                    end_at = datetime.fromisoformat(end_at.replace("Z", "+00:00"))
+                except (ValueError, AttributeError):
+                    end_at = None
+            if isinstance(observed_at, str):
+                try:
+                    observed_at = datetime.fromisoformat(observed_at.replace("Z", "+00:00"))
+                except (ValueError, AttributeError):
+                    observed_at = None
+
             event = Event(
                 id=evt["id"],
                 title=evt["title"],
-                start_at=evt["start_at"],
-                end_at=evt.get("end_at"),
+                start_at=start_at,
+                end_at=end_at,
                 location=evt.get("location"),
                 participants_json=evt.get("participants", []),
                 description=evt.get("description"),
                 source_id=doc.id,
                 source_location=evt.get("source_location", {}),
-                observed_at=evt.get("observed_at"),
+                observed_at=observed_at,
                 confidence=evt.get("confidence", 0.8),
             )
             db.add(event)
