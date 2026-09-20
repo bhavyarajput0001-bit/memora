@@ -24,13 +24,14 @@ def _headers() -> dict:
 
 def chat(
     messages: list[dict],
-    model: str = "auto",
+    model: str = "nvidia/nemotron-3-ultra-550b-a55b",
     temperature: float = 0.1,
     max_tokens: int = 2000,
     tools: Optional[list[dict]] = None,
     timeout_s: Optional[float] = None,
 ) -> dict:
-    """Call the LLM router. Returns the full response dict."""
+    """Call the LLM via NVIDIA API. Returns the full response dict."""
+    # NVIDIA reasoning models include thinking_content - we need to strip it
     body: dict[str, Any] = {
         "model": model,
         "messages": messages,
@@ -49,7 +50,13 @@ def chat(
                 url, headers=_headers(), json=body, timeout=timeout
             )
             if resp.status_code == 200:
-                return resp.json()
+                data = resp.json()
+                # NVIDIA reasoning models include reasoning_content - clean it up
+                if "choices" in data and data["choices"]:
+                    msg = data["choices"][0].get("message", {})
+                    # Remove reasoning_content if present (not needed for MEMORA)
+                    msg.pop("reasoning_content", None)
+                return data
             if resp.status_code in (429, 500, 502, 503, 504) and attempt == 0:
                 time.sleep(2)
                 continue

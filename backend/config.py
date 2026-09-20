@@ -8,13 +8,13 @@ UPLOAD_DIR = DATA_DIR / "uploads"
 DEMO_DIR = DATA_DIR / "demo"
 DB_PATH = Path(os.environ.get("MEMORA_DB_PATH", DATA_DIR / "memora.db"))
 
-# LLM router (Hermes proxy at :31416)
-LLM_BASE_URL = os.environ.get("MEMORA_LLM_BASE_URL", "http://localhost:31416/v1")
-LLM_API_KEY = os.environ.get("MEMORA_LLM_API_KEY", "local-router-key")
-LLM_MODEL_FAST = os.environ.get("MEMORA_LLM_MODEL_FAST", "deepseek-v4-flash")
-LLM_MODEL_STRONG = os.environ.get("MEMORA_LLM_MODEL_STRONG", "nemotron-3-ultra-550b")
-LLM_MODEL_VISION = os.environ.get("MEMORA_LLM_MODEL_VISION", "auto")
-LLM_TIMEOUT_S = float(os.environ.get("MEMORA_LLM_TIMEOUT_S", "60"))
+# LLM router (NVIDIA NIM API - Nemotron models)
+LLM_BASE_URL = os.environ.get("MEMORA_LLM_BASE_URL", "https://integrate.api.nvidia.com/v1")
+LLM_API_KEY = os.environ.get("MEMORA_LLM_API_KEY", "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")
+LLM_MODEL_FAST = os.environ.get("MEMORA_LLM_MODEL_FAST", "nvidia/nemotron-3-ultra-550b-a55b")
+LLM_MODEL_STRONG = os.environ.get("MEMORA_LLM_MODEL_STRONG", "nvidia/nemotron-3-ultra-550b-a55b")
+LLM_MODEL_VISION = os.environ.get("MEMORA_LLM_MODEL_VISION", "nvidia/llama-3.2-11b-vision-instruct")
+LLM_TIMEOUT_S = float(os.environ.get("MEMORA_LLM_TIMEOUT_S", "120"))
 
 # Embeddings: local sentence-transformers or external API
 EMBEDDING_ENABLED = os.environ.get("MEMORA_EMBEDDING_ENABLED", "true").lower() == "true"
