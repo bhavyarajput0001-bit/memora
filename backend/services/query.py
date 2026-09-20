@@ -2,6 +2,7 @@
 
 Architecture:
   USER QUESTION
+  -> INPUT VALIDATION (security checks)
   -> QUERY UNDERSTANDING (intent, entities, temporal scope)
   -> RETRIEVAL (hybrid search)
   -> STRUCTURED LOOKUP (facts, entities)
@@ -9,7 +10,7 @@ Architecture:
   -> CONFLICT CHECK
   -> EVIDENCE SELECTION
   -> LLM REASONING
-  -> VALIDATION
+  -> OUTPUT SANITIZATION
   -> ANSWER + SOURCES
 """
 import json
@@ -25,6 +26,7 @@ from backend.services import retrieval
 from backend.services import conflict as conflict_service
 from backend.llm import chat, LLMError
 from backend.utils import generate_id, utcnow, truncate_text
+from backend.security.middleware import is_safe_input, sanitize_input, sanitize_response, check_rate_limit
 
 logger = logging.getLogger(__name__)
 
@@ -94,12 +96,38 @@ RULES:
 
 
 def query(query_text: str, user_id: Optional[str] = None) -> dict:
-    """Execute a full query pipeline with caching."""
+    """Execute a secure query pipeline with input validation."""
     start_time = time.time()
     request_id = generate_id("req_")
     
     # Normalize query for cache key
     cache_key = query_text.strip().lower()
+    
+    # SECURITY: Input validation
+    is_safe, error = is_safe_input(query_text)
+    if not is_safe:
+        logger.warning(f"Rejected query: {error} from user {user_id}")
+        return {
+            "request_id": request_id,
+            "query": query_text[:100],
+            "error": error,
+            "status": "rejected",
+            "security_check": "blocked",
+        }
+    
+    # SECURITY: Check rate limit
+    if user_id:
+        rate_ok, rate_error = check_rate_limit(user_id)
+        if not rate_ok:
+            return {
+                "request_id": request_id,
+                "query": query_text[:100],
+                "error": rate_error,
+                "status": "rate_limited",
+            }
+    
+    # Sanitize input
+    safe_query = sanitize_input(query_text)
     
     # Check query cache first
     cached = _get_cached_query(cache_key)
@@ -110,43 +138,44 @@ def query(query_text: str, user_id: Optional[str] = None) -> dict:
     
     try:
         # Step 1: Fast intent understanding (keyword-based, no LLM)
-        intent = _simple_intent_detection(query_text)
+        intent = _simple_intent_detection(safe_query)
         
         # Step 2: Hybrid Retrieval (cached embeddings)
         evidence = retrieval.hybrid_search(
-            query=query_text,
+            query=safe_query,
             limit=15,
         )
         
         # Step 3: Structured Lookup
-        facts = _lookup_facts(intent, query_text)
+        facts = _lookup_facts(intent, safe_query)
         
         # Step 4: Temporal Analysis
-        temporal_context = _analyze_temporal(intent, query_text)
+        temporal_context = _analyze_temporal(intent, safe_query)
         
         # Step 5: Conflict Check
         conflicts = []
-        if intent.get("requires_conflict_check", False) or "conflict" in query_text.lower():
+        if intent.get("requires_conflict_check", False) or "conflict" in safe_query.lower():
             conflicts = conflict_service.get_conflicts(status="unresolved")
-            conflicts = [_filter_conflicts(c, query_text) for c in conflicts]
+            conflicts = [_filter_conflicts(c, safe_query) for c in conflicts]
             conflicts = [c for c in conflicts if c]
         
         # Step 6: Evidence Selection
-        selected_evidence = _select_evidence(evidence, facts, query_text)
+        selected_evidence = _select_evidence(evidence, facts, safe_query)
         
         # Step 7: Generate answer (try LLM, fallback to rule-based)
         answer, confidence = _generate_answer(
-            query_text, evidence, facts, conflicts, intent
+            safe_query, evidence, facts, conflicts, intent
         )
         
-        # Step 8: Validation
+        # Step 8: Sanitize and validate output
+        answer = sanitize_response(answer)
         validated_answer = _validate_answer(answer, evidence)
         
         duration_ms = (time.time() - start_time) * 1000
         
         result = {
             "request_id": request_id,
-            "query": query_text,
+            "query": safe_query,
             "intent": intent,
             "answer": validated_answer["answer"],
             "confidence": validated_answer["confidence"],
@@ -166,6 +195,7 @@ def query(query_text: str, user_id: Optional[str] = None) -> dict:
             "retrieval_duration_ms": duration_ms,
             "num_candidates": len(evidence),
             "suggested_actions": _suggest_actions(answer, intent),
+            "security_check": "passed",
         }
         
         # Cache the result (use normalized key)
@@ -176,11 +206,12 @@ def query(query_text: str, user_id: Optional[str] = None) -> dict:
         logger.error(f"Query failed: {e}", exc_info=True)
         return {
             "request_id": request_id,
-            "query": query_text,
-            "answer": f"Error processing query: {str(e)}",
+            "query": safe_query[:100],
+            "answer": f"I encountered an error processing your query.",
             "confidence": 0.0,
             "status": "error",
-            "error": str(e),
+            "error": "Internal error",  # Don't leak actual error details
+            "security_check": "error_handled",
         }
 
 
