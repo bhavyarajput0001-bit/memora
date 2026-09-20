@@ -8,10 +8,20 @@ UPLOAD_DIR = DATA_DIR / "uploads"
 DEMO_DIR = DATA_DIR / "demo"
 DB_PATH = Path(os.environ.get("MEMORA_DB_PATH", DATA_DIR / "memora.db"))
 
-# LLM router (NVIDIA NIM API - Nemotron models)
-LLM_BASE_URL = os.environ.get("MEMORA_LLM_BASE_URL", "https://integrate.api.nvidia.com/v1")
-LLM_API_KEY = os.environ.get("MEMORA_LLM_API_KEY", "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")
-LLM_MODEL_FAST = os.environ.get("MEMORA_LLM_MODEL_FAST", "nvidia/nemotron-3-ultra-550b-a55b")
+# LLM provider - NVIDIA NIM API (primary) or fallback to Hermes router
+LLM_PROVIDER = os.environ.get("MEMORA_LLM_PROVIDER", "nvidia").lower()
+if LLM_PROVIDER == "nvidia":
+    LLM_BASE_URL = os.environ.get("MEMORA_LLM_BASE_URL", "https://integrate.api.nvidia.com/v1")
+    LLM_API_KEY = os.environ.get("MEMORA_LLM_API_KEY", "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")
+elif LLM_PROVIDER == "openrouter":
+    LLM_BASE_URL = os.environ.get("MEMORA_LLM_BASE_URL", "https://openrouter.ai/api/v1")
+    LLM_API_KEY = os.environ.get("MEMORA_LLM_API_KEY", "")
+else:
+    # Hermes router fallback
+    LLM_BASE_URL = os.environ.get("MEMORA_LLM_BASE_URL", "http://localhost:31416/v1")
+    LLM_API_KEY = os.environ.get("MEMORA_LLM_API_KEY", "local-router-key")
+
+LLM_MODEL_FAST = os.environ.get("MEMORA_LLM_MODEL_FAST", "nvidia/nemotron-3.5-lightning-30b-a3b")
 LLM_MODEL_STRONG = os.environ.get("MEMORA_LLM_MODEL_STRONG", "nvidia/nemotron-3-ultra-550b-a55b")
 LLM_MODEL_VISION = os.environ.get("MEMORA_LLM_MODEL_VISION", "nvidia/llama-3.2-11b-vision-instruct")
 LLM_TIMEOUT_S = float(os.environ.get("MEMORA_LLM_TIMEOUT_S", "120"))
