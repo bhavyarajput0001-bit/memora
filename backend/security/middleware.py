@@ -31,12 +31,54 @@ XSS_PATTERNS = [
     r"<img[^>]+onerror",
 ]
 
-PROMPT_INJECTION_PATTERNS = [
-    r"ignore\s+(all\s+)?instructions",
-    r"you\s+are\s+now\s+a",
-    r"output\s+(your\s+)?secrets?",
-    r"leak\s+(your\s+)?api",
-    r"bypass\s+(security|filter|prompt)",
+COMMAND_INJECTION_PATTERNS = [
+    r"(?:;|\||&|&&|\`|\$|\(|\)|{)",
+    r"(rm\s+-rf|del\s+/s|format\s+c:|shutdown\s+-h)",
+    r"(whoami|ls\s+-la|pwd|id)\s*\(",
+    r"(nc\s+-lvn|telnet\s+|ssh\s+.*@)",
+    r"(wget\s+|curl\s+.*http)",
+]
+
+# Detect system commands and exfiltration
+SYSTEM_COMMAND_PATTERNS = [
+    r"(cat\s+/etc/passwd|cat\s+/etc/shadow)",
+    r"(python\s+-c|perl\s+-e|bash\s+-c)",
+    r"(echo\s+.*\|\s*(nc|netcat)\s+)",
+    r"(base64\s+-d|grep\s+.*password)",
+]
+
+DATA_EXFILTRATION_PATTERNS = [
+    r"(password\s*=\s*[^\s]{4,20})",
+    r"(api[_-]?key\s*=\s*[^\s]{4,50})",
+    r"(secret[_-]?key\s*=\s*[^\s]{4,50})",
+    r"(token\s*=\s*[^\s]{4,50})",
+    r"(nvapi-[a-z0-9-]{40,})",
+    r"(sk-[a-z0-9-]{20,})",
+]
+
+EXFILTRATION_PATTERNS = [
+    r"(show\s+.*variables|print.*env|os\.environ)",
+    r"(file\s+.*read|read_file|open\s+")",
+    r"(system\s*\(\s*['\"]cat)",
+    r"(subprocess\s*\.)",
+    r"(__import__\s*\(\s*['\"]os\s*['\"]\s*\))",
+]
+
+# Enhanced prompt injection patterns
+ENHANCED_PROMPT_INJECTION_PATTERNS = [
+    r"ignore\s+(all\s+)?previous\s+instructions",
+    r"you\s+are\s+(now\s+)?operating\s+as",
+    r"bypass\s+(security|filter|validation)",
+    r"reveal\s+(your\s+)?(secrets|instructions|prompts)",
+    r"system\s+(prompt|message)",
+    r"override\s+(settings|configuration)",
+]
+
+CONTEXT_MANIPULATION_PATTERNS = [
+    r"(previous|prior|earlier)\s+(context|instruction|message)",
+    r"(forget|ignore|disregard)\s+(what|that|this)",
+    r"(from|starting|begin\s+with)\s+(now|here)",
+    r"roleplay\s+(as|like|for)\s+(admin|root|system)",
 ]
 
 PATH_TRAVERSAL_PATTERNS = [
@@ -102,14 +144,36 @@ def check_path_traversal(text: str) -> bool:
     return False
 
 
-def is_safe_input(text: str) -> tuple[bool, Optional[str]]:
-    """Validate input safety. Returns (is_safe, error_message)."""
+def check_command_injection(text: str) -> bool:
+    """Check if input contains command injection patterns."""
+    for pattern in COMMAND_INJECTION_PATTERNS + SYSTEM_COMMAND_PATTERNS:
+        if re.search(pattern, text, re.IGNORECASE):
+            return True
+    return False
+
+def check_data_exfiltration(text: str) -> bool:
+    """Check if input contains data exfiltration patterns."""
+    for pattern in DATA_EXFILTRATION_PATTERNS + EXFILTRATION_PATTERNS:
+        if re.search(pattern, text, re.IGNORECASE):
+            return True
+    return False
+
+def check_context_manipulation(text: str) -> bool:
+    """Check if input contains context manipulation patterns."""
+    for pattern in ENHANCED_PROMPT_INJECTION_PATTERNS + CONTEXT_MANIPULATION_PATTERNS:
+        if re.search(pattern, text, re.IGNORECASE):
+            return True
+    return False
+
+def is_safe_input_enhanced(text: str) -> tuple[bool, Optional[str]]:
+    """Enhanced input safety validation with more patterns."""
     if not text or not text.strip():
         return False, "Query cannot be empty"
     
     if len(text) > MAX_QUERY_LENGTH:
         return False, f"Query too long (max {MAX_QUERY_LENGTH} characters)"
     
+    # Enhanced validation checks
     if check_sql_injection(text):
         return False, "Potentially malicious SQL pattern detected"
     
@@ -119,9 +183,17 @@ def is_safe_input(text: str) -> tuple[bool, Optional[str]]:
     if check_path_traversal(text):
         return False, "Potentially malicious path traversal detected"
     
-    # Note: We allow prompt injection attempts to pass through to LLM
-    # as it's the LLM's job to refuse them, not our input validation
-    # This prevents us from accidentally blocking legitimate queries
+    if check_command_injection(text):
+        return False, "Potentially malicious command injection detected"
+    
+    if check_data_exfiltration(text):
+        return False, "Potentially malicious data exfiltration detected"
+    
+    if check_context_manipulation(text):
+        return False, "Potentially malicious context manipulation detected"
+    
+    # Prompt injection - allow to pass through to LLM
+    # (LLM should refuse malicious prompts)
     
     return True, None
 
