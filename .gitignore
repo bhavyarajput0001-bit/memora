@@ -13,7 +13,7 @@ dist/
 downloads/
 eggs/
 .eggs/
-lib/
+backend/lib/
 lib64/
 parts/
 sdist/
@@ -25,6 +25,9 @@ wheels/
 .pytest_cache/
 .mypy_cache/
 .ruff_cache/
+
+# Allow frontend lib directory (needed for API client)
+!frontend/lib/
 
 # Node / Next.js
 node_modules/
