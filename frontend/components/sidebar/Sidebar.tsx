@@ -85,6 +85,7 @@ export default function Sidebar() {
       <button
         onClick={() => setCollapsed(!collapsed)}
         className="absolute -right-3 top-20 w-6 h-6 rounded-full bg-[#111827] border border-white/10 flex items-center justify-center text-slate-400 hover:text-cyan-400 transition-all z-10 hover:shadow-lg hover:shadow-cyan-500/20"
+        aria-label="Collapse sidebar"
       >
         <ChevronLeft size={12} className={collapsed ? "" : "rotate-180"} />
       </button>
@@ -149,6 +150,7 @@ export default function Sidebar() {
           <button
             onClick={() => setShowTasks(!showTasks)}
             className="flex items-center gap-2 px-3 py-2 w-full rounded-xl text-sm text-slate-400 hover:text-slate-200 hover:bg-white/5 transition-all"
+            aria-label="Show quick tasks"
           >
             <CalendarDays size={16} />
             <span className="flex-1 text-left">Quick Tasks</span>
@@ -184,11 +186,13 @@ export default function Sidebar() {
                       onChange={(e) => setNewTask(e.target.value)}
                       onKeyDown={(e) => e.key === "Enter" && addTask()}
                       placeholder="Add task..."
+                      aria-label="Add new task"
                       className="flex-1 bg-transparent text-xs text-slate-300 placeholder-slate-600 outline-none"
                     />
                     <button
                       onClick={addTask}
                       className="text-slate-500 hover:text-cyan-400 transition-colors"
+                      aria-label="Add task"
                     >
                       <Plus size={14} />
                     </button>
@@ -209,11 +213,13 @@ export default function Sidebar() {
           <Plug size={18} className="text-slate-500 flex-shrink-0" />
           {!collapsed && <span>Integrations</span>}
         </Link>
-        <button className="flex items-center gap-3 px-3 py-3 rounded-xl text-sm text-slate-400 hover:text-slate-200 hover:bg-white/5 w-full transition-all duration-200">
+        <button className="flex items-center gap-3 px-3 py-3 rounded-xl text-sm text-slate-400 hover:text-slate-200 hover:bg-white/5 w-full transition-all duration-200"
+          aria-label="Open settings">
           <Settings size={18} className="text-slate-500 flex-shrink-0" />
           {!collapsed && <span>Settings</span>}
         </button>
-        <button className="flex items-center gap-3 px-3 py-3 rounded-xl text-sm text-slate-400 hover:text-slate-200 hover:bg-white/5 w-full transition-all duration-200">
+        <button className="flex items-center gap-3 px-3 py-3 rounded-xl text-sm text-slate-400 hover:text-slate-200 hover:bg-white/5 w-full transition-all duration-200"
+          aria-label="View user profile">
           <User size={18} className="text-slate-500 flex-shrink-0" />
           {!collapsed && <span className="font-medium">bhavyarajput</span>}
         </button>
