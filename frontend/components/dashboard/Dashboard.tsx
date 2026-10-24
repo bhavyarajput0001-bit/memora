@@ -21,6 +21,7 @@ import {
 } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { api } from "@/lib/api";
+import { useErrorContext } from "@/lib/error-context";
 import DetailModal from "./DetailModal";
 import UploadModal from "./UploadModal";
 
@@ -73,6 +74,7 @@ export default function Dashboard() {
   const [lastSynced, setLastSynced] = useState<string>("");
   const [selectedCategory, setSelectedCategory] = useState<Category | null>(null);
   const [uploadType, setUploadType] = useState<UploadType | null>(null);
+  const { showToast } = useErrorContext();
 
   // Load real data from backend
   useEffect(() => {
@@ -118,7 +120,13 @@ export default function Dashboard() {
         setConflicts(conflictsResponse.data.conflicts?.slice(0, 3) || []);
       }
     } catch (error) {
-      console.error("Failed to load dashboard data:", error);
+      // Fallback for truly unexpected errors
+      showToast({
+        severity: "error",
+        title: "Unexpected error",
+        description:
+          error instanceof Error ? error.message : "An unknown error occurred",
+      });
     } finally {
       setLoading(false);
     }
