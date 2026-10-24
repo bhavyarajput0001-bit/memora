@@ -3,7 +3,6 @@
 import { useState, useEffect } from "react";
 import { X, Search, Database, Users, Calendar, TrendingUp, FileText, Loader2, ChevronLeft, ChevronRight, Plus } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
-import type { ReactNode } from "react";
 import { api } from "@/lib/api";
 
 type Category = "facts" | "people" | "events" | "relationships" | "sources";
@@ -20,9 +19,22 @@ interface CalendarEvent {
   color?: string;
 }
 
+// Breakpoint detection hook for responsive behavior
+function useIsMobile() {
+  const [isMobile, setIsMobile] = useState(false);
+  useEffect(() => {
+    const check = () => setIsMobile(window.innerWidth < 640);
+    check();
+    window.addEventListener("resize", check);
+    return () => window.removeEventListener("resize", check);
+  }, []);
+  return isMobile;
+}
+
 const COLORS = ["#c5221f", "#188038", "#039be5", "#f1c40f", "#8e24aa", "#607d8b"];
 
 export default function CalendarPage() {
+  const isMobile = useIsMobile();
   const [currentDate, setCurrentDate] = useState(new Date());
   const [viewMode, setViewMode] = useState<ViewMode>("month");
   const [events, setEvents] = useState<CalendarEvent[]>([]);
@@ -41,6 +53,10 @@ export default function CalendarPage() {
   const [categoryItems, setCategoryItems] = useState<any[]>([]);
   const [categoryLoading, setCategoryLoading] = useState(false);
   const [categorySearch, setCategorySearch] = useState("");
+  const weekdayHeaderClass = isMobile ?
+    "text-center text-xs font-medium text-slate-500 py-1" :
+    "text-center text-xs font-medium text-slate-500 py-2";
+  const dayCellClass = isMobile ? "h-20" : "h-28";
 
   // Load events
   useEffect(() => {
@@ -233,7 +249,7 @@ export default function CalendarPage() {
         <div
           key={day}
           onClick={() => openNewEventModal(dateStr)}
-          className="h-28 bg-white/5 border border-white/5 rounded-lg p-2 cursor-pointer hover:bg-white/10 transition-all group"
+          className={`${dayCellClass} bg-white/5 border border-white/5 rounded-lg p-2 cursor-pointer hover:bg-white/10 transition-all group`}
         >
           <div className="flex items-center justify-between mb-1">
             <span className={`text-sm font-medium w-7 h-7 rounded-full flex items-center justify-center ${
@@ -245,11 +261,11 @@ export default function CalendarPage() {
               onClick={(e) => { e.stopPropagation(); openNewEventModal(dateStr); }}
               className="opacity-0 group-hover:opacity-100 p-1 hover:bg-white/10 rounded transition-all"
             >
-              <Plus size={14} className="text-slate-400" />
+              <Plus size={isMobile ? 12 : 14} className="text-slate-400" />
             </button>
           </div>
           <div className="space-y-1 overflow-hidden mt-1">
-            {dayEvents.slice(0, 2).map((event, i) => (
+            {dayEvents.slice(0, isMobile ? 1 : 2).map((event, i) => (
               <div
                 key={i}
                 onClick={(e) => { e.stopPropagation(); openEditEventModal(event); }}
@@ -260,8 +276,8 @@ export default function CalendarPage() {
                 {event.title}
               </div>
             ))}
-            {dayEvents.length > 2 && (
-              <div className="text-xs text-slate-500 pl-1">+{dayEvents.length - 2} more</div>
+            {dayEvents.length > (isMobile ? 1 : 2) && (
+              <div className="text-xs text-slate-500 pl-1">+{dayEvents.length - (isMobile ? 1 : 2)} more</div>
             )}
           </div>
         </div>
@@ -295,9 +311,9 @@ export default function CalendarPage() {
           </div>
           <button
             onClick={() => openNewEventModal()}
-            className="flex items-center gap-2 px-4 py-2.5 bg-cyan-500/15 border border-cyan-500/20 text-cyan-400 rounded-xl text-sm font-medium hover:bg-cyan-500/25 transition-all"
+            className={`flex items-center gap-2 px-4 py-2.5 bg-cyan-500/15 border border-cyan-500/20 text-cyan-400 rounded-xl text-sm font-medium hover:bg-cyan-500/25 transition-all ${isMobile ? "mb-2" : ""}`}
           >
-            <Plus size={16} /> New Event
+            <Plus size={isMobile ? 14 : 16} /> New Event
           </button>
         </div>
       </div>
@@ -321,7 +337,7 @@ export default function CalendarPage() {
       <div className="glass-card p-4">
         <div className="grid grid-cols-7 gap-2 mb-2">
           {dayNames.map((day) => (
-            <div key={day} className="text-center text-xs font-medium text-slate-500 py-2">
+            <div key={day} className={weekdayHeaderClass}>
               {day}
             </div>
           ))}
@@ -332,7 +348,7 @@ export default function CalendarPage() {
       </div>
 
       {/* Bottom Section: Memory Categories + Upcoming Events */}
-      <div className="grid grid-cols-2 gap-6">
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
         {/* Memory Overview Categories */}
         <div className="glass-card p-5">
           <h3 className="font-semibold text-white mb-4">Memory Overview</h3>
@@ -346,8 +362,8 @@ export default function CalendarPage() {
                   onClick={() => loadCategoryData(cat)}
                   className="flex flex-col items-center gap-1 p-3 rounded-xl bg-white/5 border border-white/5 hover:border-white/10 hover:bg-white/10 transition-all"
                 >
-                  <Icon size={20} className="text-slate-400" />
-                  <span className="text-[10px] text-slate-500">{config.label}</span>
+                  <Icon size={isMobile ? 18 : 20} className="text-slate-400" />
+                  <span className={`text-[${isMobile ? "9" : "10"}px] text-slate-500`}>{config.label}</span>
                 </button>
               );
             })}
