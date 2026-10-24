@@ -78,3 +78,4 @@ htmlcov/
 tmp/
 tmp/
 .turbo/
+.vercel
