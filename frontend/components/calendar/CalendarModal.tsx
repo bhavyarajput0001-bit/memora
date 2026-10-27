@@ -42,10 +42,9 @@ export default function CalendarModal({ isOpen, onClose }: CalendarModalProps) {
   useEffect(() => {
     const loadEvents = async () => {
       try {
-        const response = await fetch("http://127.0.0.1:8000/api/v1/timeline/?days=30");
-        const data = await response.json();
-        if (data.success && data.data.events) {
-          setEvents(data.data.events.map((e: any) => ({
+        const response = await api.getTimeline(30);
+        if (response.success && response.data.events) {
+          setEvents(response.data.events.map((e: any) => ({
             id: e.id,
             title: e.title || e.description,
             date: e.date,
@@ -75,17 +74,13 @@ export default function CalendarModal({ isOpen, onClose }: CalendarModalProps) {
     setNewEvent({ title: "", date: "", time: "", location: "", description: "" });
     setIsAdding(false);
 
-    // Save to backend
-    fetch("http://127.0.0.1:8000/api/v1/events", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        title: newEvent.title,
-        date: newEvent.date,
-        time: newEvent.time,
-        location: newEvent.location,
-        description: newEvent.description,
-      }),
+    // Save to backend via API client
+    api.createEvent({
+      title: newEvent.title,
+      date: newEvent.date,
+      time: newEvent.time,
+      location: newEvent.location,
+      description: newEvent.description,
     }).catch(console.error);
   };
 

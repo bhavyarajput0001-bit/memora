@@ -44,46 +44,21 @@ export default function GraphPage() {
   useEffect(() => {
     const loadData = async () => {
       try {
-        const response = await fetch("http://127.0.0.1:8000/api/v1/memory/graph");
-        const data = await response.json();
-        
-        const graphNodes: GraphNode[] = [];
-        const graphLinks: GraphLink[] = [];
-        
-        data.entities?.forEach((entity: any) => {
-          graphNodes.push({
-            id: `entity_${entity.id}`,
-            label: entity.name,
-            type: "person",
-          });
-        });
-        
-        data.projects?.forEach((project: any) => {
-          graphNodes.push({
-            id: `project_${project.id}`,
-            label: project.name,
-            type: "project",
-          });
-        });
-        
-        data.facts?.forEach((fact: any) => {
-          const factId = `fact_${fact.id}`;
-          graphNodes.push({
-            id: factId,
-            label: fact.subject || fact.predicate || "Fact",
-            type: "fact",
-          });
+        const response = await api.getGraph();
+        if (response.success) {
+          // Handle graph data from backend
+          const data = response.data;
+          const graphNodes: GraphNode[] = [];
+          const graphLinks: GraphLink[] = [];
           
-          if (fact.subject) {
-            graphLinks.push({
-              source: `entity_${fact.subject.toLowerCase().replace(/\s+/g, "_")}`,
-              target: factId,
-              type: "relates to",
-            });
+          // If backend returns nodes/links directly
+          if (data.nodes && data.links) {
+            setNodes(data.nodes);
+            setLinks(data.links);
+            return;
           }
-        });
-        
-        if (graphNodes.length === 0) {
+          
+          // Demo data fallback
           const demoNodes: GraphNode[] = [
             { id: "atlas", label: "Project Atlas", type: "project" },
             { id: "rahul", label: "Rahul Verma", type: "person" },
@@ -111,9 +86,6 @@ export default function GraphPage() {
           
           setNodes(demoNodes);
           setLinks(demoLinks);
-        } else {
-          setNodes(graphNodes);
-          setLinks(graphLinks);
         }
       } catch (error) {
         console.error("Failed to load graph data:", error);

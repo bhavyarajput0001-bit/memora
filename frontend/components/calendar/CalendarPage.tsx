@@ -126,17 +126,9 @@ export default function CalendarPage() {
       };
 
       if (editingEvent) {
-        await fetch(`http://127.0.0.1:8000/api/v1/events/${editingEvent.id}`, {
-          method: "PUT",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(payload),
-        });
+        await api.updateEvent(editingEvent.id, payload);
       } else {
-        await fetch("http://127.0.0.1:8000/api/v1/events", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(payload),
-        });
+        await api.createEvent(payload);
       }
 
       await loadEvents();
@@ -148,9 +140,7 @@ export default function CalendarPage() {
 
   const deleteEvent = async (id: string) => {
     try {
-      await fetch(`http://127.0.0.1:8000/api/v1/events/${id}`, {
-        method: "DELETE",
-      });
+      await api.deleteEvent(id);
       setEvents(events.filter(e => e.id !== id));
       setShowEventModal(false);
     } catch (error) {

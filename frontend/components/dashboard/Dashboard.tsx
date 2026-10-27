@@ -88,47 +88,89 @@ export default function Dashboard() {
   const loadDashboardData = async () => {
     try {
       setLoading(true);
+
+      // Consolidated API call - fetches all dashboard data in one request
+      const dashboardResponse = await api.getDashboardData();
       
-      // Load stats
-      const statsResponse = await api.getMemoryStats();
-      if (statsResponse.success) {
-        setStats({
-          facts: statsResponse.data.total_facts || 0,
-          entities: statsResponse.data.total_entities || 0,
-          events: statsResponse.data.recent_facts?.length || 0,
-          relationships: 0,
-          sources: statsResponse.data.total_documents || 0,
-        });
-      }
+      if (dashboardResponse.success && dashboardResponse.data) {
+        const { stats, activities, conflicts } = dashboardResponse.data;
+        
+        // Update stats
+        if (stats) {
+          setStats({
+            facts: stats.total_facts || 0,
+            entities: stats.total_entities || 0,
+            events: stats.recent_facts?.length || 0,
+            relationships: 0,
+            sources: stats.total_documents || 0,
+          });
+        }
 
-      // Load recent activities
-      const activitiesResponse = await api.getTimeline(7);
-      if (activitiesResponse.success) {
-        setRecentActivities(activitiesResponse.data.events?.slice(0, 5) || []);
-        setLastSynced(new Date().toLocaleTimeString());
-      }
+        // Update recent activities
+        if (activities) {
+          setRecentActivities(activities);
+          setLastSynced(new Date().toLocaleTimeString());
+        }
 
-      // Load upcoming events
-      const eventsResponse = await api.getTimeline(30);
-      if (eventsResponse.success) {
-        setUpcomingEvents(eventsResponse.data.events?.filter((e: any) => new Date(e.date) > new Date()).slice(0, 3) || []);
-      }
-
-      // Load conflicts
-      const conflictsResponse = await api.getConflicts();
-      if (conflictsResponse.success) {
-        setConflicts(conflictsResponse.data.conflicts?.slice(0, 3) || []);
+        // Update conflicts
+        if (conflicts) {
+          setConflicts(conflicts);
+        }
+      } else {
+        // Fallback to individual calls if consolidated fails
+        await Promise.allSettled([
+          loadStats(),
+          loadActivities(),
+          loadEvents(),
+          loadConflicts(),
+        ]);
       }
     } catch (error) {
-      // Fallback for truly unexpected errors
       showToast({
         severity: "error",
-        title: "Unexpected error",
-        description:
-          error instanceof Error ? error.message : "An unknown error occurred",
+        title: "Failed to load dashboard",
+        description: error instanceof Error ? error.message : "An unknown error occurred",
       });
     } finally {
       setLoading(false);
+    }
+  };
+
+  // Individual load functions for fallback
+  const loadStats = async () => {
+    const statsResponse = await api.getMemoryStats();
+    if (statsResponse.success) {
+      setStats({
+        facts: statsResponse.data.total_facts || 0,
+        entities: statsResponse.data.total_entities || 0,
+        events: statsResponse.data.recent_facts?.length || 0,
+        relationships: 0,
+        sources: statsResponse.data.total_documents || 0,
+      });
+    }
+  };
+
+  const loadActivities = async () => {
+    const activitiesResponse = await api.getTimeline(7);
+    if (activitiesResponse.success) {
+      setRecentActivities(activitiesResponse.data.events?.slice(0, 5) || []);
+      setLastSynced(new Date().toLocaleTimeString());
+    }
+  };
+
+  const loadEvents = async () => {
+    const eventsResponse = await api.getTimeline(30);
+    if (eventsResponse.success) {
+      setUpcomingEvents(
+        eventsResponse.data.events?.filter((e: any) => new Date(e.date) > new Date()).slice(0, 3) || []
+      );
+    }
+  };
+
+  const loadConflicts = async () => {
+    const conflictsResponse = await api.getConflicts();
+    if (conflictsResponse.success) {
+      setConflicts(conflictsResponse.data.conflicts?.slice(0, 3) || []);
     }
   };
 
