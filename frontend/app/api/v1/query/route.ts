@@ -1,4 +1,11 @@
 import { NextRequest, NextResponse } from 'next/server';
+import { z } from 'zod';
+
+// Input validation schema
+const QuerySchema = z.object({
+  query: z.string().min(1).max(1000),
+  limit: z.number().int().min(1).max(50).optional().default(5),
+});
 
 interface MemoryChunk {
   id: string;
@@ -29,7 +36,7 @@ function tfidfScore(query: string, document: string): number {
   const queryTokens = tokenize(query);
   const docTokens = tokenize(document);
   if (queryTokens.length === 0 || docTokens.length === 0) return 0;
-  
+
   const docSet = new Set(docTokens);
   let score = 0;
   for (const token of queryTokens) {
@@ -41,27 +48,36 @@ function tfidfScore(query: string, document: string): number {
 export async function POST(request: NextRequest) {
   try {
     const body = await request.json();
-    const { query, limit = 5 } = body;
-    
-    if (!query) {
-      return NextResponse.json({ error: 'Query is required' }, { status: 400 });
+
+    // Validate input with Zod
+    const parsed = QuerySchema.safeParse(body);
+    if (!parsed.success) {
+      return NextResponse.json(
+        {
+          error: 'Invalid query parameters',
+          details: parsed.error.flatten()
+        },
+        { status: 400 }
+      );
     }
-    
+
+    const { query, limit } = parsed.data;
+
     const scored = store.chunks
       .map(chunk => ({ ...chunk, score: tfidfScore(query, chunk.text) }))
       .filter(c => c.score > 0)
       .sort((a, b) => b.score - a.score)
       .slice(0, limit);
-    
+
     const entityMatches = store.entities.filter(e =>
       e.name.toLowerCase().includes(query.toLowerCase()) ||
       e.aliases.some(a => a.toLowerCase().includes(query.toLowerCase()))
     );
-    
-    const answer = scored.length > 0 
+
+    const answer = scored.length > 0
       ? `Found ${scored.length} relevant memories.`
       : 'No relevant memories found.';
-    
+
     return NextResponse.json({
       query,
       answer,
@@ -74,10 +90,13 @@ export async function POST(request: NextRequest) {
       entities: entityMatches,
       confidence: scored.length > 0 ? Math.min(0.9, 0.5 + scored[0].score * 0.5) : 0.1
     });
-    
+
   } catch (error) {
-    console.error('API Error:', error);
-    return NextResponse.json({ error: 'Internal server error' }, { status: 500 });
+    console.error('Query API error:', error);
+    return NextResponse.json(
+      { error: 'Internal server error' },
+      { status: 500 }
+    );
   }
 }
 
