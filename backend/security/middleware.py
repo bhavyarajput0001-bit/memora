@@ -58,7 +58,7 @@ DATA_EXFILTRATION_PATTERNS = [
 
 EXFILTRATION_PATTERNS = [
     r"(show\s+.*variables|print.*env|os\.environ)",
-    r"(file\s+.*read|read_file|open\s+")",
+    r'(file\s+.*read|read_file|open\s+")',
     r"(system\s*\(\s*['\"]cat)",
     r"(subprocess\s*\.)",
     r"(__import__\s*\(\s*['\"]os\s*['\"]\s*\))",
@@ -169,33 +169,37 @@ def is_safe_input_enhanced(text: str) -> tuple[bool, Optional[str]]:
     """Enhanced input safety validation with more patterns."""
     if not text or not text.strip():
         return False, "Query cannot be empty"
-    
+
     if len(text) > MAX_QUERY_LENGTH:
         return False, f"Query too long (max {MAX_QUERY_LENGTH} characters)"
-    
+
     # Enhanced validation checks
     if check_sql_injection(text):
         return False, "Potentially malicious SQL pattern detected"
-    
+
     if check_xss(text):
         return False, "Potentially malicious XSS pattern detected"
-    
+
     if check_path_traversal(text):
         return False, "Potentially malicious path traversal detected"
-    
+
     if check_command_injection(text):
         return False, "Potentially malicious command injection detected"
-    
+
     if check_data_exfiltration(text):
         return False, "Potentially malicious data exfiltration detected"
-    
+
     if check_context_manipulation(text):
         return False, "Potentially malicious context manipulation detected"
-    
+
     # Prompt injection - allow to pass through to LLM
     # (LLM should refuse malicious prompts)
-    
+
     return True, None
+
+
+# Backward compatibility alias
+is_safe_input = is_safe_input_enhanced
 
 
 def check_rate_limit(client_ip: str) -> tuple[bool, Optional[str]]:

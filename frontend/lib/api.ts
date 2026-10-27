@@ -34,6 +34,12 @@ export interface MemoryFact {
   timestamp: string; // ISO timestamp
   entities: string[];
   categories?: string[];
+  // Extended fields for UI display
+  subject?: string;
+  predicate?: string;
+  object?: string;
+  status?: string;
+  observed_at?: string;
 }
 
 export interface Source {
@@ -51,6 +57,7 @@ export interface CalendarEvent {
   id: string;
   title: string;
   date: string;
+  time?: string;
   startTime?: string;
   endTime?: string;
   location?: string;
@@ -189,6 +196,30 @@ const api = {
       activities?: any[];
       conflicts?: Conflict[];
     }>('/v1/dashboard'),
+
+  // File ingestion — must send raw FormData (never JSON.stringify it)
+  ingestFile: (file: File, options?: { type?: string }) => {
+    const formData = new FormData();
+    formData.append('file', file);
+    if (options?.type) {
+      formData.append('type', options.type);
+    }
+    return new Promise<{ success: boolean; data: any; error?: string }>((resolve) => {
+      fetch(buildUrl('/v1/ingest/file'), { method: 'POST', body: formData })
+        .then(async (res) => {
+          const json: any = await res.json().catch(() => ({}));
+          if (!res.ok) {
+            return resolve({
+              success: false,
+              error: json.detail || json.error || `HTTP ${res.status}`,
+              data: {},
+            });
+          }
+          return resolve({ success: true, data: json });
+        })
+        .catch((error: any) => resolve({ success: false, error: error?.message || 'Network error', data: {} }));
+    });
+  },
 };
 
 export { api };
