@@ -13,5 +13,20 @@
       "src": "/(.*)",
       "dest": "/frontend/$1"
     }
+  ],
+  "services": {
+    "web": {
+      "root": ".",
+      "entrypoint": "backend/app.py"
+    }
+  },
+  "rewrites": [
+    {
+      "source": "/(.*)",
+      "destination": {
+        "type": "service",
+        "service": "web"
+      }
+    }
   ]
 }

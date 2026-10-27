@@ -12,7 +12,7 @@ Personal AI Memory / Evidence / Context / Action System
 
 ## 🚀 Live Demo
 
-**Frontend (Production)**: https://memora-4uruyyfbr-bhavyarajput0001-bits-projects.vercel.app
+**Frontend (Production)**: https://memora-phgir8q4n-bhavyarajput0001-bits-projects.vercel.app
 
 **Backend (Local)**: http://localhost:8000
 > **Note**: For full production deployment, see [RENDER_DEPLOY.md](./RENDER_DEPLOY.md) to deploy backend to Render.
