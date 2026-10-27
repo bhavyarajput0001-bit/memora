@@ -1,15 +1,16 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { 
-  Calendar as CalendarIcon, 
-  Plus, 
-  Clock, 
+import {
+  Calendar as CalendarIcon,
+  Plus,
+  Clock,
   MapPin,
   CheckCircle,
   X,
 } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
+import { api } from "@/lib/api";
 
 interface CalendarEvent {
   id: string;

@@ -12,8 +12,8 @@ export default function ConflictsPage() {
   const [filter, setFilter] = useState<"all" | "unresolved" | "resolved">("all");
 
   useEffect(() => {
-    api.getConflicts(filter === "all" ? "all" : filter).then(res => {
-      if (res.success) setConflicts(res.data.conflicts);
+    api.getConflicts().then(res => {
+      if (res.success) setConflicts(res.data.conflicts || []);
       setLoading(false);
     }).catch(() => setLoading(false));
   }, [filter]);

@@ -30,7 +30,7 @@ export async function GET(request: NextRequest) {
     const query = TimelineQuerySchema.safeParse({ days: daysParam });
     if (!query.success) {
       return NextResponse.json(
-        { error: 'Invalid query parameters', details: query.error.errors },
+        { error: 'Invalid query parameters', details: query.error.issues },
         { status: 400 }
       );
     }

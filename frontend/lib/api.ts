@@ -16,6 +16,14 @@ export interface Conflict {
   detectedAt: string; // ISO timestamp
   resolvedAt?: string;
   entitiesInvolved: string[];
+  // Extended fields for UI display
+  subject?: string;
+  predicate?: string;
+  value_a?: string;
+  value_b?: string;
+  fact_a?: { value?: string; source?: string; date?: string };
+  fact_b?: { value?: string; source?: string; date?: string };
+  resolution?: string;
 }
 
 export interface MemoryFact {
