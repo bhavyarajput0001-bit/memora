@@ -222,8 +222,8 @@ export default function CalendarSidebar() {
         {events.length === 0 ? (
           <div className="text-center py-8">
             <CalendarIcon size={32} className="mx-auto text-slate-700 mb-2" />
-            <p className="text-xs text-slate-500">No events yet</p>
-            <p className="text-xs text-slate-600 mt-1">Add your first event</p>
+            <p className="text-xs text-slate-300">No events yet</p>
+            <p className="text-xs text-slate-300 mt-1">Add your first event</p>
           </div>
         ) : (
           <div className="space-y-2">
@@ -237,7 +237,7 @@ export default function CalendarSidebar() {
                   <div className="flex items-start justify-between">
                     <div className="flex-1 min-w-0">
                       <div className="text-sm text-slate-200 font-medium truncate">{event.title}</div>
-                      <div className="flex items-center gap-2 mt-1 text-xs text-slate-500">
+                      <div className="flex items-center gap-2 mt-1 text-xs text-slate-300">
                         <Clock size={10} />
                         <span>{formatDate(event.date)}</span>
                         {event.time && (
@@ -252,7 +252,7 @@ export default function CalendarSidebar() {
                       onClick={() => deleteEvent(event.id)}
                       className="opacity-0 group-hover:opacity-100 p-1 hover:bg-white/10 rounded transition-all"
                     >
-                      <X size={12} className="text-slate-500" />
+                      <X size={12} className="text-slate-300" />
                     </button>
                   </div>
                   {daysUntil >= 0 && daysUntil <= 7 && (

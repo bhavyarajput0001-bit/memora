@@ -342,7 +342,7 @@ export default function GraphPage() {
 
         {/* Legend */}
         <div className="absolute bottom-4 left-4 bg-[#0a0f1e]/90 backdrop-blur-xl border border-white/10 rounded-xl p-4">
-          <div className="text-xs text-slate-500 mb-3 font-semibold uppercase tracking-wider">Node Types</div>
+          <div className="text-xs text-slate-300 mb-3 font-semibold uppercase tracking-wider">Node Types</div>
           <div className="grid grid-cols-2 gap-2">
             {Object.entries(TYPE_CONFIG).map(([type, config]) => (
               <div key={type} className="flex items-center gap-2">
@@ -355,7 +355,7 @@ export default function GraphPage() {
 
         {/* Stats */}
         <div className="absolute bottom-4 right-4 bg-[#0a0f1e]/90 backdrop-blur-xl border border-white/10 rounded-xl p-4">
-          <div className="text-xs text-slate-500 mb-2 font-semibold uppercase tracking-wider">Network</div>
+          <div className="text-xs text-slate-300 mb-2 font-semibold uppercase tracking-wider">Network</div>
           <div className="text-sm text-slate-300">
             <span className="text-cyan-400 font-semibold">{nodes.length}</span> nodes · <span className="text-cyan-400 font-semibold">{links.length}</span> connections
           </div>
@@ -396,7 +396,7 @@ export default function GraphPage() {
 
             <div className="space-y-4 flex-1 overflow-y-auto">
               <div>
-                <div className="text-xs text-slate-500 uppercase tracking-wider mb-2">Connections</div>
+                <div className="text-xs text-slate-300 uppercase tracking-wider mb-2">Connections</div>
                 <div className="space-y-2">
                   {links
                     .filter(l => l.source === selectedNode.id || l.target === selectedNode.id)
@@ -415,18 +415,18 @@ export default function GraphPage() {
                             style={{ backgroundColor: TYPE_CONFIG[otherNode.type]?.color }}
                           />
                           <span className="flex-1">{otherNode.label}</span>
-                          <span className="text-xs text-slate-500">{link.type}</span>
+                          <span className="text-xs text-slate-300">{link.type}</span>
                         </div>
                       );
                     })}
                   {links.filter(l => l.source === selectedNode.id || l.target === selectedNode.id).length === 0 && (
-                    <div className="text-sm text-slate-500 italic">No connections</div>
+                    <div className="text-sm text-slate-300 italic">No connections</div>
                   )}
                 </div>
               </div>
 
               <div>
-                <div className="text-xs text-slate-500 uppercase tracking-wider mb-2">Related Memories</div>
+                <div className="text-xs text-slate-300 uppercase tracking-wider mb-2">Related Memories</div>
                 <div className="space-y-2">
                   <div className="text-sm text-slate-300 bg-white/5 rounded-lg p-3">
                     Project discussion and planning sessions

@@ -101,7 +101,7 @@ export default function Sidebar() {
           {!collapsed && (
             <div className="flex flex-col">
               <h1 className="text-white font-bold text-sm tracking-[0.2em] uppercase">MEMORA</h1>
-              <p className="text-slate-500 text-[10px] tracking-wider">Connected Memory</p>
+              <p className="text-slate-300 text-[10px] tracking-wider">Connected Memory</p>
             </div>
           )}
         </div>
@@ -128,7 +128,7 @@ export default function Sidebar() {
                 className={`transition-all duration-200 flex-shrink-0 relative z-10 ${
                   isActive
                     ? "text-cyan-400 drop-shadow-[0_0_8px_rgba(6,182,212,0.5)]"
-                    : "text-slate-500 group-hover:text-slate-300"
+                    : "text-slate-300 group-hover:text-slate-300"
                 }`}
               />
               {!collapsed && (
@@ -176,7 +176,7 @@ export default function Sidebar() {
                         <CheckCircle size={10} className="text-cyan-400 opacity-0 group-hover:opacity-100" />
                       </button>
                       <span className="flex-1 text-xs text-slate-400 group-hover:text-slate-200">{task.title}</span>
-                      <span className="text-[10px] text-slate-600">{task.time}</span>
+                      <span className="text-[10px] text-slate-300">{task.time}</span>
                     </div>
                   ))}
                   <div className="flex items-center gap-2 mt-2">
@@ -191,7 +191,7 @@ export default function Sidebar() {
                     />
                     <button
                       onClick={addTask}
-                      className="text-slate-500 hover:text-cyan-400 transition-colors"
+                      className="text-slate-300 hover:text-cyan-400 transition-colors"
                       aria-label="Add task"
                     >
                       <Plus size={14} />
@@ -210,17 +210,17 @@ export default function Sidebar() {
           href="/integrations"
           className="flex items-center gap-3 px-3 py-3 rounded-xl text-sm text-slate-400 hover:text-slate-200 hover:bg-white/5 w-full transition-all duration-200"
         >
-          <Plug size={18} className="text-slate-500 flex-shrink-0" />
+          <Plug size={18} className="text-slate-300 flex-shrink-0" />
           {!collapsed && <span>Integrations</span>}
         </Link>
         <button className="flex items-center gap-3 px-3 py-3 rounded-xl text-sm text-slate-400 hover:text-slate-200 hover:bg-white/5 w-full transition-all duration-200"
           aria-label="Open settings">
-          <Settings size={18} className="text-slate-500 flex-shrink-0" />
+          <Settings size={18} className="text-slate-300 flex-shrink-0" />
           {!collapsed && <span>Settings</span>}
         </button>
         <button className="flex items-center gap-3 px-3 py-3 rounded-xl text-sm text-slate-400 hover:text-slate-200 hover:bg-white/5 w-full transition-all duration-200"
           aria-label="View user profile">
-          <User size={18} className="text-slate-500 flex-shrink-0" />
+          <User size={18} className="text-slate-300 flex-shrink-0" />
           {!collapsed && <span className="font-medium">bhavyarajput</span>}
         </button>
       </div>

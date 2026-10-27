@@ -145,7 +145,7 @@ export default function CalendarModal({ isOpen, onClose }: CalendarModalProps) {
                 </div>
                 <div>
                   <h2 className="font-semibold text-white">Upcoming Events</h2>
-                  <p className="text-xs text-slate-500">{events.length} events scheduled</p>
+                  <p className="text-xs text-slate-300">{events.length} events scheduled</p>
                 </div>
               </div>
               <button
@@ -161,10 +161,10 @@ export default function CalendarModal({ isOpen, onClose }: CalendarModalProps) {
               {events.length === 0 && !isAdding ? (
                 <div className="flex flex-col items-center justify-center h-full text-center py-12">
                   <div className="w-16 h-16 rounded-2xl bg-white/5 border border-white/10 flex items-center justify-center mb-4">
-                    <CalendarIcon size={28} className="text-slate-600" />
+                    <CalendarIcon size={28} className="text-slate-300" />
                   </div>
                   <p className="text-slate-400 font-medium mb-1">No events yet</p>
-                  <p className="text-xs text-slate-600">Add your first event to get started</p>
+                  <p className="text-xs text-slate-300">Add your first event to get started</p>
                   <button
                     onClick={() => setIsAdding(true)}
                     className="mt-6 px-4 py-2.5 bg-cyan-500/15 border border-cyan-500/20 text-cyan-400 rounded-xl text-sm font-medium hover:bg-cyan-500/25 transition-all flex items-center gap-2"
@@ -183,7 +183,7 @@ export default function CalendarModal({ isOpen, onClose }: CalendarModalProps) {
                     <h3 className="text-sm font-medium text-slate-300">New Event</h3>
                     <button
                       onClick={() => setIsAdding(false)}
-                      className="text-xs text-slate-500 hover:text-slate-300 transition-colors"
+                      className="text-xs text-slate-300 hover:text-slate-300 transition-colors"
                     >
                       Cancel
                     </button>
@@ -191,7 +191,7 @@ export default function CalendarModal({ isOpen, onClose }: CalendarModalProps) {
 
                   <div className="space-y-3">
                     <div>
-                      <label className="block text-xs text-slate-500 mb-1.5">Title *</label>
+                      <label className="block text-xs text-slate-300 mb-1.5">Title *</label>
                       <input
                         type="text"
                         value={newEvent.title}
@@ -204,7 +204,7 @@ export default function CalendarModal({ isOpen, onClose }: CalendarModalProps) {
 
                     <div className="grid grid-cols-2 gap-3">
                       <div>
-                        <label className="block text-xs text-slate-500 mb-1.5">Date *</label>
+                        <label className="block text-xs text-slate-300 mb-1.5">Date *</label>
                         <input
                           type="date"
                           value={newEvent.date}
@@ -213,7 +213,7 @@ export default function CalendarModal({ isOpen, onClose }: CalendarModalProps) {
                         />
                       </div>
                       <div>
-                        <label className="block text-xs text-slate-500 mb-1.5">Time</label>
+                        <label className="block text-xs text-slate-300 mb-1.5">Time</label>
                         <input
                           type="time"
                           value={newEvent.time}
@@ -224,9 +224,9 @@ export default function CalendarModal({ isOpen, onClose }: CalendarModalProps) {
                     </div>
 
                     <div>
-                      <label className="block text-xs text-slate-500 mb-1.5">Location</label>
+                      <label className="block text-xs text-slate-300 mb-1.5">Location</label>
                       <div className="relative">
-                        <MapPin size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-600" />
+                        <MapPin size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-300" />
                         <input
                           type="text"
                           value={newEvent.location}
@@ -238,7 +238,7 @@ export default function CalendarModal({ isOpen, onClose }: CalendarModalProps) {
                     </div>
 
                     <div>
-                      <label className="block text-xs text-slate-500 mb-1.5">Description</label>
+                      <label className="block text-xs text-slate-300 mb-1.5">Description</label>
                       <textarea
                         value={newEvent.description}
                         onChange={(e) => setNewEvent({ ...newEvent, description: e.target.value })}
@@ -280,7 +280,7 @@ export default function CalendarModal({ isOpen, onClose }: CalendarModalProps) {
                               }`} />
                               <span className="text-sm text-slate-200 font-medium truncate">{event.title}</span>
                             </div>
-                            <div className="flex items-center gap-2 text-xs text-slate-500 ml-4">
+                            <div className="flex items-center gap-2 text-xs text-slate-300 ml-4">
                               <CalendarIcon size={10} />
                               <span>{formatFullDate(event.date)}</span>
                               {event.time && (
@@ -291,7 +291,7 @@ export default function CalendarModal({ isOpen, onClose }: CalendarModalProps) {
                               )}
                             </div>
                             {event.location && (
-                              <div className="flex items-center gap-1 text-xs text-slate-600 ml-4 mt-1">
+                              <div className="flex items-center gap-1 text-xs text-slate-300 ml-4 mt-1">
                                 <MapPin size={10} />
                                 <span className="truncate">{event.location}</span>
                               </div>
@@ -301,7 +301,7 @@ export default function CalendarModal({ isOpen, onClose }: CalendarModalProps) {
                             onClick={() => deleteEvent(event.id)}
                             className="opacity-0 group-hover:opacity-100 p-1.5 hover:bg-white/10 rounded-lg transition-all"
                           >
-                            <X size={12} className="text-slate-500" />
+                            <X size={12} className="text-slate-300" />
                           </button>
                         </div>
                         {daysUntil >= 0 && (

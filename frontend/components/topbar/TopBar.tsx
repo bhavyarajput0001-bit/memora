@@ -25,7 +25,7 @@ export default function TopBar() {
             initial={false}
             animate={{ scale: searchFocused ? 1.02 : 1 }}
           >
-            <Search size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-500" />
+            <Search size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-300" />
             <input
               type="text"
               value={searchValue}
@@ -40,15 +40,15 @@ export default function TopBar() {
               }`}
             />
             <div className="absolute right-3 top-1/2 -translate-y-1/2 flex items-center gap-1">
-              <kbd className="px-1.5 py-0.5 text-[10px] text-slate-500 bg-[#1e293b] rounded border border-white/10">⌘</kbd>
-              <kbd className="px-1.5 py-0.5 text-[10px] text-slate-500 bg-[#1e293b] rounded border border-white/10">K</kbd>
+              <kbd className="px-1.5 py-0.5 text-[10px] text-slate-300 bg-[#1e293b] rounded border border-white/10">⌘</kbd>
+              <kbd className="px-1.5 py-0.5 text-[10px] text-slate-300 bg-[#1e293b] rounded border border-white/10">K</kbd>
             </div>
           </motion.div>
         </div>
         
         <div className="flex items-center gap-3 relative z-10">
           <motion.div 
-            className="flex items-center gap-2 text-xs text-slate-500 px-3 py-1.5 rounded-lg bg-[#111827]/60 border border-white/5"
+            className="flex items-center gap-2 text-xs text-slate-300 px-3 py-1.5 rounded-lg bg-[#111827]/60 border border-white/5"
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
           >

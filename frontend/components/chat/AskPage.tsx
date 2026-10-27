@@ -130,8 +130,8 @@ export default function AskPage() {
                       </div>
                       <span className="text-xs font-medium text-cyan-400 uppercase tracking-wider">MEMORA</span>
                       <CheckCircle size={14} className="text-emerald-500" />
-                      <span className="text-xs text-slate-500">{msg.status === "likely_current" ? "LIKELY CURRENT" : msg.status || "ANSWER"}</span>
-                      {msg.confidence && <span className="text-xs text-slate-500">{(msg.confidence * 100).toFixed(0)}% confidence</span>}
+                      <span className="text-xs text-slate-300">{msg.status === "likely_current" ? "LIKELY CURRENT" : msg.status || "ANSWER"}</span>
+                      {msg.confidence && <span className="text-xs text-slate-300">{(msg.confidence * 100).toFixed(0)}% confidence</span>}
                     </div>
                     <div className="prose prose-invert max-w-none">
                       <p className="text-slate-200 text-lg leading-relaxed">{msg.content}</p>
@@ -149,13 +149,13 @@ export default function AskPage() {
                           <div key={i} className="text-sm">
                             <div className="flex items-center gap-2 mb-1">
                               <span className="px-2.5 py-1 bg-rose-500/10 text-rose-400 rounded-lg text-xs font-medium border border-rose-500/20">{conflict.fact_a.value}</span>
-                              <span className="text-slate-500 text-xs">{conflict.fact_a.source} — {conflict.fact_a.date}</span>
+                              <span className="text-slate-300 text-xs">{conflict.fact_a.source} — {conflict.fact_a.date}</span>
                             </div>
                             <div className="flex items-center gap-2">
                               <span className="px-2.5 py-1 bg-emerald-500/10 text-emerald-400 rounded-lg text-xs font-medium border border-emerald-500/20">{conflict.fact_b.value}</span>
-                              <span className="text-slate-500 text-xs">{conflict.fact_b.source} — {conflict.fact_b.date}</span>
+                              <span className="text-slate-300 text-xs">{conflict.fact_b.source} — {conflict.fact_b.date}</span>
                             </div>
-                            {conflict.resolution && <div className="text-xs text-slate-500 mt-2">{conflict.resolution}</div>}
+                            {conflict.resolution && <div className="text-xs text-slate-300 mt-2">{conflict.resolution}</div>}
                           </div>
                         ))}
                       </div>
@@ -164,14 +164,14 @@ export default function AskPage() {
 
                   {msg.sources && msg.sources.length > 0 && (
                     <div>
-                      <div className="text-xs text-slate-500 mb-2 uppercase tracking-wider">Sources ({msg.sources.length})</div>
+                      <div className="text-xs text-slate-300 mb-2 uppercase tracking-wider">Sources ({msg.sources.length})</div>
                       <div className="space-y-2">
                         {msg.sources.map((source) => (
                           <div key={source.id} className="flex items-start gap-3 p-3 glass-card">
                             <FileText size={16} className="text-cyan-500 flex-shrink-0 mt-0.5" />
                             <div className="flex-1 min-w-0">
                               <div className="text-sm text-slate-200 font-medium">{source.filename}</div>
-                              {source.page && <div className="text-xs text-slate-500">Page {source.page}</div>}
+                              {source.page && <div className="text-xs text-slate-300">Page {source.page}</div>}
                               <div className="text-xs text-slate-400 mt-1 line-clamp-2">"{source.snippet}"</div>
                             </div>
                           </div>
@@ -184,7 +184,7 @@ export default function AskPage() {
             </motion.div>
           ))}
           {isLoading && (
-            <div className="flex items-center gap-2 text-slate-500">
+            <div className="flex items-center gap-2 text-slate-300">
               <Loader2 size={16} className="animate-spin" />
               <span className="text-sm">Analyzing sources...</span>
             </div>
@@ -223,12 +223,12 @@ export default function AskPage() {
                   <FileText size={14} className="text-cyan-500" />
                   <span className="text-sm text-slate-200 font-medium">{source.filename}</span>
                 </div>
-                {source.page && <div className="text-xs text-slate-500 mb-2">Page {source.page}</div>}
+                {source.page && <div className="text-xs text-slate-300 mb-2">Page {source.page}</div>}
                 <div className="text-xs text-slate-400">"{source.snippet}"</div>
                 <div className="flex gap-2 mt-3">
                   <button className="text-xs text-cyan-400 hover:text-cyan-300 transition-colors">Open source</button>
-                  <button className="text-xs text-slate-500 hover:text-slate-300 transition-colors">View timeline</button>
-                  <button className="text-xs text-slate-500 hover:text-slate-300 transition-colors">View graph</button>
+                  <button className="text-xs text-slate-300 hover:text-slate-300 transition-colors">View timeline</button>
+                  <button className="text-xs text-slate-300 hover:text-slate-300 transition-colors">View graph</button>
                 </div>
               </div>
             ))}

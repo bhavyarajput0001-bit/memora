@@ -48,7 +48,7 @@ export default function MemoryPage() {
 
       <div className="flex items-center gap-4">
         <div className="relative flex-1">
-          <Search size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-500" />
+          <Search size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-300" />
           <input type="text" placeholder="Search everything MEMORA remembers..." value={search} onChange={(e) => setSearch(e.target.value)} className="w-full pl-10 pr-4 py-2.5 bg-[#111827]/60 border border-white/5 rounded-xl text-sm text-slate-200 placeholder-slate-500 focus:outline-none focus:border-cyan-500/50 focus:ring-2 focus:ring-cyan-500/20 transition-all" />
         </div>
       </div>
@@ -69,20 +69,20 @@ export default function MemoryPage() {
                 <div className="flex-1">
                   <div className="flex items-center gap-2 mb-1">
                     <span className={`text-xs px-2 py-0.5 rounded-lg ${memory.status === "confirmed" ? "bg-emerald-500/10 text-emerald-400" : memory.status === "likely_current" ? "bg-cyan-500/10 text-cyan-400" : "bg-amber-500/10 text-amber-400"}`}>{memory.status}</span>
-                    <span className="text-xs text-slate-500">{new Date(memory.observed_at).toLocaleDateString()}</span>
+                    <span className="text-xs text-slate-300">{new Date(memory.observed_at).toLocaleDateString()}</span>
                   </div>
                   <div className="text-sm text-slate-200 font-medium">{statement}</div>
                 </div>
-                <div className="text-xs text-slate-500">{(memory.confidence * 100).toFixed(0)}%</div>
+                <div className="text-xs text-slate-300">{(memory.confidence * 100).toFixed(0)}%</div>
               </motion.div>
             );
           })}
         </div>
       ) : (
         <div className="text-center py-12">
-          <Database size={48} className="mx-auto text-slate-600 mb-4" />
+          <Database size={48} className="mx-auto text-slate-300 mb-4" />
           <p className="text-slate-400">No memories found</p>
-          <p className="text-slate-600 text-sm mt-1">Upload documents to start building your memory</p>
+          <p className="text-slate-300 text-sm mt-1">Upload documents to start building your memory</p>
         </div>
       )}
     </div>

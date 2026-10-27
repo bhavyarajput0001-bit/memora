@@ -54,8 +54,8 @@ export default function CalendarPage() {
   const [categoryLoading, setCategoryLoading] = useState(false);
   const [categorySearch, setCategorySearch] = useState("");
   const weekdayHeaderClass = isMobile ?
-    "text-center text-xs font-medium text-slate-500 py-1" :
-    "text-center text-xs font-medium text-slate-500 py-2";
+    "text-center text-xs font-medium text-slate-300 py-1" :
+    "text-center text-xs font-medium text-slate-300 py-2";
   const dayCellClass = isMobile ? "h-20" : "h-28";
 
   // Load events
@@ -277,7 +277,7 @@ export default function CalendarPage() {
               </div>
             ))}
             {dayEvents.length > (isMobile ? 1 : 2) && (
-              <div className="text-xs text-slate-500 pl-1">+{dayEvents.length - (isMobile ? 1 : 2)} more</div>
+              <div className="text-xs text-slate-300 pl-1">+{dayEvents.length - (isMobile ? 1 : 2)} more</div>
             )}
           </div>
         </div>
@@ -293,7 +293,7 @@ export default function CalendarPage() {
       <div className="flex items-center justify-between">
         <div>
           <h1 className="text-2xl font-bold text-white mb-1">Calendar</h1>
-          <p className="text-slate-500 text-sm">{monthNames[currentDate.getMonth()]} {currentDate.getFullYear()}</p>
+          <p className="text-slate-300 text-sm">{monthNames[currentDate.getMonth()]} {currentDate.getFullYear()}</p>
         </div>
         <div className="flex items-center gap-3">
           <div className="flex items-center gap-1 bg-white/5 border border-white/10 rounded-xl p-1">
@@ -363,7 +363,7 @@ export default function CalendarPage() {
                   className="flex flex-col items-center gap-1 p-3 rounded-xl bg-white/5 border border-white/5 hover:border-white/10 hover:bg-white/10 transition-all"
                 >
                   <Icon size={isMobile ? 18 : 20} className="text-slate-400" />
-                  <span className={`text-[${isMobile ? "9" : "10"}px] text-slate-500`}>{config.label}</span>
+                  <span className={`text-[${isMobile ? "9" : "10"}px] text-slate-300`}>{config.label}</span>
                 </button>
               );
             })}
@@ -393,7 +393,7 @@ export default function CalendarPage() {
                     <div className="w-1 h-8 rounded-full flex-shrink-0" style={{ backgroundColor: event.color }} />
                     <div className="flex-1 min-w-0">
                       <p className="text-sm text-slate-200 font-medium truncate">{event.title}</p>
-                      <p className="text-xs text-slate-500">
+                      <p className="text-xs text-slate-300">
                         {new Date(event.date).toLocaleDateString("en-US", { month: "short", day: "numeric" })}
                         {event.startTime && ` • ${event.startTime}`}
                       </p>
@@ -409,7 +409,7 @@ export default function CalendarPage() {
                 );
               })}
             {events.filter(e => new Date(e.date) >= new Date()).length === 0 && (
-              <div className="text-center py-6 text-slate-500">
+              <div className="text-center py-6 text-slate-300">
                 <p className="text-sm">No upcoming events</p>
                 <button onClick={() => openNewEventModal()} className="mt-2 text-xs text-cyan-400 hover:text-cyan-300">
                   + Add event
@@ -525,7 +525,7 @@ export default function CalendarPage() {
                   </div>
                   <div>
                     <h2 className="font-semibold text-white text-lg">{categoryConfig[selectedCategory].label}</h2>
-                    <p className="text-xs text-slate-500">{filteredItems.length} items</p>
+                    <p className="text-xs text-slate-300">{filteredItems.length} items</p>
                   </div>
                 </div>
                 <button onClick={() => setSelectedCategory(null)} className="p-2 hover:bg-white/10 rounded-xl transition-all">
@@ -536,7 +536,7 @@ export default function CalendarPage() {
               {/* Search */}
               <div className="px-5 py-3 border-b border-white/5 flex-shrink-0">
                 <div className="relative">
-                  <Search size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-500" />
+                  <Search size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-300" />
                   <input
                     type="text"
                     value={categorySearch}
@@ -552,12 +552,12 @@ export default function CalendarPage() {
                 {categoryLoading ? (
                   <div className="flex flex-col items-center justify-center h-40 gap-3">
                     <Loader2 size={28} className="text-cyan-500 animate-spin" />
-                    <p className="text-slate-500 text-sm">Loading...</p>
+                    <p className="text-slate-300 text-sm">Loading...</p>
                   </div>
                 ) : filteredItems.length === 0 ? (
                   <div className="flex flex-col items-center justify-center h-40 text-center">
                     <div className="w-12 h-12 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center mb-3">
-                      {categoryConfig[selectedCategory].icon({ size: 22, className: "text-slate-600" } as any)}
+                      {categoryConfig[selectedCategory].icon({ size: 22, className: "text-slate-300" } as any)}
                     </div>
                     <p className="text-slate-400 font-medium text-sm">No items found</p>
                   </div>
@@ -575,7 +575,7 @@ export default function CalendarPage() {
                           <div>
                             <div className="flex items-center gap-2 mb-1">
                               <span className="text-xs px-2 py-0.5 rounded-full bg-cyan-500/10 text-cyan-400">{item.status || "confirmed"}</span>
-                              <span className="text-xs text-slate-600">{(item.confidence * 100).toFixed(0)}%</span>
+                              <span className="text-xs text-slate-300">{(item.confidence * 100).toFixed(0)}%</span>
                             </div>
                             <p className="text-sm text-slate-200">{item.subject} <span className="text-cyan-400">{item.predicate}</span> {item.object}</p>
                           </div>
@@ -587,7 +587,7 @@ export default function CalendarPage() {
                             </div>
                             <div>
                               <p className="text-sm font-medium text-slate-200">{item.canonical_name}</p>
-                              <p className="text-xs text-slate-500">{item.entity_type}</p>
+                              <p className="text-xs text-slate-300">{item.entity_type}</p>
                             </div>
                           </div>
                         )}
@@ -598,7 +598,7 @@ export default function CalendarPage() {
                             </div>
                             <div className="flex-1 min-w-0">
                               <p className="text-sm font-medium text-slate-200 truncate">{item.title}</p>
-                              <p className="text-xs text-slate-500">{new Date(item.start_at).toLocaleDateString()}</p>
+                              <p className="text-xs text-slate-300">{new Date(item.start_at).toLocaleDateString()}</p>
                             </div>
                           </div>
                         )}
@@ -616,7 +616,7 @@ export default function CalendarPage() {
                             </div>
                             <div className="flex-1 min-w-0">
                               <p className="text-sm font-medium text-slate-200 truncate">{item.title || item.filename}</p>
-                              <p className="text-xs text-slate-500">{item.source_type}</p>
+                              <p className="text-xs text-slate-300">{item.source_type}</p>
                             </div>
                           </div>
                         )}

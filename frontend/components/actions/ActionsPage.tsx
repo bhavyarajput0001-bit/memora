@@ -51,8 +51,8 @@ export default function ActionsPage() {
                   <span className={`text-xs px-2 py-0.5 rounded-lg ${action.status === "proposed" ? "bg-amber-500/10 text-amber-400" : action.status === "pending" ? "bg-cyan-500/10 text-cyan-400" : "bg-emerald-500/10 text-emerald-400"}`}>{action.status}</span>
                 </div>
                 <div className="text-sm text-slate-400 mb-2">{action.description}</div>
-                <div className="text-xs text-slate-500">Based on: {action.basedOn}</div>
-                <div className="text-xs text-slate-600 mt-1">Evidence: {action.evidence}</div>
+                <div className="text-xs text-slate-300">Based on: {action.basedOn}</div>
+                <div className="text-xs text-slate-300 mt-1">Evidence: {action.evidence}</div>
               </div>
             </div>
             {selectedAction === action.id && (

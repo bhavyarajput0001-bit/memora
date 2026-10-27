@@ -121,7 +121,7 @@ export default function UploadModal({ isOpen, type, onClose, onUploadComplete }:
                 </div>
                 <div>
                   <h2 className="font-semibold text-white text-lg">{config?.title}</h2>
-                  <p className="text-xs text-slate-500">{config?.description}</p>
+                  <p className="text-xs text-slate-300">{config?.description}</p>
                 </div>
               </div>
               <button onClick={onClose} className="p-2 hover:bg-white/10 rounded-xl transition-all">
@@ -149,7 +149,7 @@ export default function UploadModal({ isOpen, type, onClose, onUploadComplete }:
                             : "Click to upload"
                           }
                         </p>
-                        <p className="text-xs text-slate-500">
+                        <p className="text-xs text-slate-300">
                           {type === "pdf" ? "PDF files up to 50MB" : "Images up to 20MB"}
                         </p>
                         <input
@@ -171,7 +171,7 @@ export default function UploadModal({ isOpen, type, onClose, onUploadComplete }:
                               </div>
                               <div className="flex-1 min-w-0">
                                 <p className="text-sm text-slate-200 truncate">{file.name}</p>
-                                <p className="text-xs text-slate-500">{(file.size / 1024 / 1024).toFixed(2)} MB</p>
+                                <p className="text-xs text-slate-300">{(file.size / 1024 / 1024).toFixed(2)} MB</p>
                               </div>
                               <button
                                 onClick={() => setState(prev => ({
@@ -180,7 +180,7 @@ export default function UploadModal({ isOpen, type, onClose, onUploadComplete }:
                                 }))}
                                 className="p-1.5 hover:bg-white/10 rounded-lg transition-all"
                               >
-                                <X size={14} className="text-slate-500" />
+                                <X size={14} className="text-slate-300" />
                               </button>
                             </div>
                           ))}
@@ -218,7 +218,7 @@ export default function UploadModal({ isOpen, type, onClose, onUploadComplete }:
                         <CheckCircle size={32} className="text-emerald-400" />
                       </div>
                       <p className="text-slate-200 font-medium mb-1">Upload Complete!</p>
-                      <p className="text-sm text-slate-500">Your {type} has been processed and added to memory</p>
+                      <p className="text-sm text-slate-300">Your {type} has been processed and added to memory</p>
                     </div>
                   )}
                 </div>
@@ -234,7 +234,7 @@ export default function UploadModal({ isOpen, type, onClose, onUploadComplete }:
                           </div>
                           <div>
                             <p className="text-slate-200 font-medium">Connect your {type}</p>
-                            <p className="text-xs text-slate-500">Enter your API key to connect</p>
+                            <p className="text-xs text-slate-300">Enter your API key to connect</p>
                           </div>
                         </div>
                         
@@ -247,7 +247,7 @@ export default function UploadModal({ isOpen, type, onClose, onUploadComplete }:
                             className="w-full px-4 py-2.5 bg-[#0a0f1e]/60 border border-white/10 rounded-xl text-sm text-slate-200 placeholder-slate-500 outline-none focus:border-cyan-500/50 transition-colors"
                           />
                           
-                          <div className="flex items-center gap-2 text-xs text-slate-500">
+                          <div className="flex items-center gap-2 text-xs text-slate-300">
                             <CheckCircle size={12} className="text-emerald-500" />
                             <span>Securely encrypted connection</span>
                           </div>
@@ -279,7 +279,7 @@ export default function UploadModal({ isOpen, type, onClose, onUploadComplete }:
                         )}
                       </button>
 
-                      <p className="text-xs text-slate-600 text-center">
+                      <p className="text-xs text-slate-300 text-center">
                         Your API key is stored securely and never shared
                       </p>
                     </>
@@ -289,7 +289,7 @@ export default function UploadModal({ isOpen, type, onClose, onUploadComplete }:
                         <CheckCircle size={32} className="text-emerald-400" />
                       </div>
                       <p className="text-slate-200 font-medium mb-1">Connected Successfully!</p>
-                      <p className="text-sm text-slate-500">Your {type} is now syncing with MEMORA</p>
+                      <p className="text-sm text-slate-300">Your {type} is now syncing with MEMORA</p>
                     </div>
                   )}
                 </div>

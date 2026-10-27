@@ -137,7 +137,7 @@ export default function DetailModal({ isOpen, category, onClose }: ModalProps) {
                 </div>
                 <div>
                   <h2 className="text-xl font-bold text-white">{config?.label}</h2>
-                  <p className="text-sm text-slate-500">
+                  <p className="text-sm text-slate-300">
                     {filteredItems.length} {filteredItems.length === 1 ? "item" : "items"}
                   </p>
                 </div>
@@ -154,7 +154,7 @@ export default function DetailModal({ isOpen, category, onClose }: ModalProps) {
             {/* Search Bar */}
             <div className="px-6 py-4 border-b border-white/5 flex-shrink-0">
               <div className="relative">
-                <Search size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-500" />
+                <Search size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-300" />
                 <input
                   type="text"
                   value={searchQuery}
@@ -170,15 +170,15 @@ export default function DetailModal({ isOpen, category, onClose }: ModalProps) {
               {loading ? (
                 <div className="flex flex-col items-center justify-center h-full gap-4">
                   <Loader2 size={32} className="text-cyan-500 animate-spin" />
-                  <p className="text-slate-500 text-sm">Loading {config?.label.toLowerCase()}...</p>
+                  <p className="text-slate-300 text-sm">Loading {config?.label.toLowerCase()}...</p>
                 </div>
               ) : filteredItems.length === 0 ? (
                 <div className="flex flex-col items-center justify-center h-full text-center">
                   <div className="w-16 h-16 rounded-2xl bg-white/5 border border-white/10 flex items-center justify-center mb-4">
-                    <Icon size={28} className="text-slate-600" />
+                    <Icon size={28} className="text-slate-300" />
                   </div>
                   <p className="text-slate-400 font-medium mb-1">No {config?.label.toLowerCase()} found</p>
-                  <p className="text-xs text-slate-600">
+                  <p className="text-xs text-slate-300">
                     {searchQuery 
                       ? "Try adjusting your search" 
                       : `Upload documents or connect your calendar to add ${config?.label.toLowerCase()}`
@@ -202,18 +202,18 @@ export default function DetailModal({ isOpen, category, onClose }: ModalProps) {
                               <span className="text-xs px-2 py-0.5 rounded-full bg-cyan-500/10 text-cyan-400 border border-cyan-500/20">
                                 {item.status || "confirmed"}
                               </span>
-                              <span className="text-xs text-slate-500">
+                              <span className="text-xs text-slate-300">
                                 {new Date(item.observed_at).toLocaleDateString()}
                               </span>
                             </div>
-                            <span className="text-xs text-slate-600">
+                            <span className="text-xs text-slate-300">
                               {(item.confidence * 100).toFixed(0)}% confident
                             </span>
                           </div>
                           <p className="text-sm text-slate-200 font-medium">
                             {item.subject} <span className="text-cyan-400">{item.predicate}</span> {item.object}
                           </p>
-                          <p className="text-xs text-slate-500">Source: {item.source_id}</p>
+                          <p className="text-xs text-slate-300">Source: {item.source_id}</p>
                         </div>
                       )}
 
@@ -225,7 +225,7 @@ export default function DetailModal({ isOpen, category, onClose }: ModalProps) {
                             </div>
                             <div>
                               <p className="text-sm font-medium text-slate-200">{item.canonical_name}</p>
-                              <p className="text-xs text-slate-500">{item.entity_type}</p>
+                              <p className="text-xs text-slate-300">{item.entity_type}</p>
                             </div>
                           </div>
                           {item.aliases && item.aliases.length > 0 && (
@@ -245,14 +245,14 @@ export default function DetailModal({ isOpen, category, onClose }: ModalProps) {
                           <div className="flex items-start justify-between">
                             <div>
                               <p className="text-sm font-medium text-slate-200">{item.title}</p>
-                              <p className="text-xs text-slate-500 mt-1">{item.description}</p>
+                              <p className="text-xs text-slate-300 mt-1">{item.description}</p>
                             </div>
                             <span className="text-xs px-2 py-1 bg-amber-500/10 text-amber-400 rounded-lg border border-amber-500/20">
                               {new Date(item.start_at).toLocaleDateString()}
                             </span>
                           </div>
                           {item.location && (
-                            <p className="text-xs text-slate-500 flex items-center gap-1">
+                            <p className="text-xs text-slate-300 flex items-center gap-1">
                               📍 {item.location}
                             </p>
                           )}
@@ -266,7 +266,7 @@ export default function DetailModal({ isOpen, category, onClose }: ModalProps) {
                             <span className="text-cyan-400 text-sm">→</span>
                             <span className="text-sm text-slate-200">{item.object}</span>
                           </div>
-                          <p className="text-xs text-slate-500">{item.predicate}</p>
+                          <p className="text-xs text-slate-300">{item.predicate}</p>
                         </div>
                       )}
 
@@ -278,13 +278,13 @@ export default function DetailModal({ isOpen, category, onClose }: ModalProps) {
                             </div>
                             <div className="flex-1">
                               <p className="text-sm font-medium text-slate-200">{item.title || item.filename}</p>
-                              <p className="text-xs text-slate-500">{item.source_type}</p>
+                              <p className="text-xs text-slate-300">{item.source_type}</p>
                             </div>
-                            <span className="text-xs text-slate-500">
+                            <span className="text-xs text-slate-300">
                               {new Date(item.upload_time).toLocaleDateString()}
                             </span>
                           </div>
-                          <div className="flex gap-3 text-xs text-slate-500">
+                          <div className="flex gap-3 text-xs text-slate-300">
                             {item.facts && <span>{item.facts} facts</span>}
                             {item.entities && <span>{item.entities} entities</span>}
                             {item.events && <span>{item.events} events</span>}
@@ -299,7 +299,7 @@ export default function DetailModal({ isOpen, category, onClose }: ModalProps) {
 
             {/* Footer */}
             <div className="p-4 border-t border-white/5 flex items-center justify-between flex-shrink-0">
-              <p className="text-xs text-slate-500">
+              <p className="text-xs text-slate-300">
                 Click any item to view details
               </p>
               <button

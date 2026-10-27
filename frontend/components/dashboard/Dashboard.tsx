@@ -218,7 +218,7 @@ export default function Dashboard() {
             Ask
           </button>
         </motion.div>
-        <div className="flex items-center gap-3 mt-4 text-xs text-slate-500">
+        <div className="flex items-center gap-3 mt-4 text-xs text-slate-300">
           {[
             { type: "pdf" as UploadType, label: "PDF", icon: FileText },
             { type: "screenshot" as UploadType, label: "Screenshot", icon: ImageIcon },
@@ -243,7 +243,7 @@ export default function Dashboard() {
       {/* Memory Overview */}
       <motion.div variants={itemVariants}>
         <div className="flex items-center justify-between mb-4">
-          <h2 className="text-xs font-semibold text-slate-500 uppercase tracking-wider">
+          <h2 className="text-xs font-semibold text-slate-300 uppercase tracking-wider">
             Memory Overview
           </h2>
           <Link href="/memory" className="text-xs text-cyan-400 hover:text-cyan-300 transition-colors flex items-center gap-1 group">
@@ -280,7 +280,7 @@ export default function Dashboard() {
                       <AnimatedNumber value={stat.value} />
                     )}
                   </div>
-                  <div className="text-xs text-slate-500">{stat.label}</div>
+                  <div className="text-xs text-slate-300">{stat.label}</div>
                 </div>
               </motion.div>
             );
@@ -300,7 +300,7 @@ export default function Dashboard() {
           </div>
           <div className="space-y-3">
             {upcomingEvents.length === 0 ? (
-              <div className="text-center py-8 text-slate-500">
+              <div className="text-center py-8 text-slate-300">
                 <Calendar size={32} className="mx-auto mb-2 opacity-50" />
                 <p className="text-sm">No upcoming events</p>
                 <p className="text-xs mt-1">Add events from your calendar</p>
@@ -314,7 +314,7 @@ export default function Dashboard() {
                 >
                   <div>
                     <div className="text-sm text-slate-200 font-medium">{item.title || item.description}</div>
-                    <div className="text-xs text-slate-500">{new Date(item.date).toLocaleDateString()}</div>
+                    <div className="text-xs text-slate-300">{new Date(item.date).toLocaleDateString()}</div>
                   </div>
                   {item.daysUntil && (
                     <span className="text-xs px-2.5 py-1 bg-cyan-500/10 text-cyan-400 rounded-lg font-medium border border-cyan-500/20">
@@ -340,7 +340,7 @@ export default function Dashboard() {
           </div>
           <div className="space-y-4">
             {conflicts.length === 0 ? (
-              <div className="text-center py-8 text-slate-500">
+              <div className="text-center py-8 text-slate-300">
                 <CheckCircle size={32} className="mx-auto mb-2 opacity-50 text-emerald-500" />
                 <p className="text-sm">No conflicts detected</p>
                 <p className="text-xs mt-1">Your memories are consistent</p>
@@ -359,7 +359,7 @@ export default function Dashboard() {
                     <span className="px-2.5 py-1.5 bg-rose-500/10 text-rose-400 rounded-lg font-medium border border-rose-500/20">
                       {conflict.value_a}
                     </span>
-                    <span className="text-slate-500">vs</span>
+                    <span className="text-slate-300">vs</span>
                     <span className="px-2.5 py-1.5 bg-emerald-500/10 text-emerald-400 rounded-lg font-medium border border-emerald-500/20">
                       {conflict.value_b}
                     </span>
@@ -378,12 +378,12 @@ export default function Dashboard() {
               onClick={loadDashboardData}
               className="p-1.5 hover:bg-white/10 rounded-lg transition-all"
             >
-              <RefreshCw size={14} className="text-slate-500 hover:text-cyan-400 transition-colors" />
+              <RefreshCw size={14} className="text-slate-300 hover:text-cyan-400 transition-colors" />
             </button>
           </div>
           <div className="space-y-0">
             {recentActivities.length === 0 ? (
-              <div className="text-center py-8 text-slate-500">
+              <div className="text-center py-8 text-slate-300">
                 <Sparkles size={32} className="mx-auto mb-2 opacity-50" />
                 <p className="text-sm">No activity yet</p>
                 <p className="text-xs mt-1">Start by adding your first source</p>
@@ -396,7 +396,7 @@ export default function Dashboard() {
                   whileHover={{ x: 4 }}
                 >
                   <div className="text-sm text-slate-200 font-medium">{item.description || item.event}</div>
-                  <div className="text-xs text-slate-500 mt-1">{item.time || new Date().toLocaleString()}</div>
+                  <div className="text-xs text-slate-300 mt-1">{item.time || new Date().toLocaleString()}</div>
                 </motion.div>
               ))
             )}
@@ -407,7 +407,7 @@ export default function Dashboard() {
         <motion.div variants={itemVariants} className="col-span-3 glass-card p-6 interactive-card">
           <h3 className="font-semibold text-white mb-5">Memory Activity</h3>
           {recentActivities.length === 0 ? (
-            <div className="text-center py-12 text-slate-500">
+            <div className="text-center py-12 text-slate-300">
               <Database size={48} className="mx-auto mb-4 opacity-30" />
               <p className="text-base">Your memory is empty</p>
               <p className="text-sm mt-2">Upload PDFs, screenshots, or connect your calendar to start building your memory</p>
@@ -435,8 +435,8 @@ export default function Dashboard() {
                           {activity.category}
                         </span>
                       </div>
-                      <div className="text-xs text-slate-500 mt-1">{activity.description}</div>
-                      <div className="text-xs text-slate-600 mt-1">{activity.time || new Date().toLocaleString()}</div>
+                      <div className="text-xs text-slate-300 mt-1">{activity.description}</div>
+                      <div className="text-xs text-slate-300 mt-1">{activity.time || new Date().toLocaleString()}</div>
                     </div>
                   </motion.div>
                 ))}
@@ -447,7 +447,7 @@ export default function Dashboard() {
       </div>
 
       {/* Footer */}
-      <div className="flex items-center justify-between text-xs text-slate-600 pt-4 border-t border-white/5">
+      <div className="flex items-center justify-between text-xs text-slate-300 pt-4 border-t border-white/5">
         <span className="font-medium">MEMORA v0.1.0</span>
         <span className="flex items-center gap-2">
           <span className="w-2 h-2 rounded-full bg-emerald-500 shadow-lg shadow-emerald-500/50 animate-pulse"></span>

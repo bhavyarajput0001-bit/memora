@@ -119,13 +119,13 @@ export default function SourcesPage() {
         <div className="flex items-center gap-2 px-4 py-2 bg-cyan-500/10 border border-cyan-500/20 rounded-xl">
           <BarChart3 size={16} className="text-cyan-400" />
           <span className="text-cyan-400 font-medium">{sourceStats.total}</span>
-          <span className="text-slate-500 text-sm">total</span>
+          <span className="text-slate-300 text-sm">total</span>
         </div>
       </div>
 
       {/* Search */}
       <div className="relative">
-        <Search size={18} className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-500" />
+        <Search size={18} className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-300" />
         <input
           type="text"
           placeholder="Search by filename or title..."
@@ -156,7 +156,7 @@ export default function SourcesPage() {
             >
               <div className="flex items-center gap-3">
                 <div className={`w-10 h-10 rounded-lg flex items-center justify-center ${isActive ? "bg-white/10" : "bg-white/5"}`}>
-                  <Icon size={20} className={isActive ? panel.color : "text-slate-500"} />
+                  <Icon size={20} className={isActive ? panel.color : "text-slate-300"} />
                 </div>
                 <div className="text-left">
                   <p className={`text-xs font-medium ${isActive ? "text-white" : "text-slate-400"}`}>
@@ -182,7 +182,7 @@ export default function SourcesPage() {
       {/* Sources List */}
       {filteredSources.length > 0 ? (
         <div className="space-y-3">
-          <div className="flex items-center justify-between text-xs text-slate-500 px-1">
+          <div className="flex items-center justify-between text-xs text-slate-300 px-1">
             <span>Showing {filteredSources.length} of {sources.length} sources</span>
             {search && <span>Filtered by: "{search}"</span>}
           </div>
@@ -223,7 +223,7 @@ export default function SourcesPage() {
                           {source.source_type.toUpperCase()}
                         </span>
                       </div>
-                      <div className="flex items-center gap-4 text-xs text-slate-500">
+                      <div className="flex items-center gap-4 text-xs text-slate-300">
                         <span className="flex items-center gap-1">
                           <Clock size={12} />
                           {new Date(source.upload_time).toLocaleDateString()}
@@ -263,15 +263,15 @@ export default function SourcesPage() {
                           <div className="grid grid-cols-3 gap-4">
                             <div className="p-3 bg-[#0a0f1e]/60 rounded-lg border border-white/5">
                               <div className="text-2xl font-bold text-white">0</div>
-                              <div className="text-xs text-slate-500">Facts Extracted</div>
+                              <div className="text-xs text-slate-300">Facts Extracted</div>
                             </div>
                             <div className="p-3 bg-[#0a0f1e]/60 rounded-lg border border-white/5">
                               <div className="text-2xl font-bold text-white">0</div>
-                              <div className="text-xs text-slate-500">Entities Found</div>
+                              <div className="text-xs text-slate-300">Entities Found</div>
                             </div>
                             <div className="p-3 bg-[#0a0f1e]/60 rounded-lg border border-white/5">
                               <div className="text-2xl font-bold text-white">0</div>
-                              <div className="text-xs text-slate-500">Events Detected</div>
+                              <div className="text-xs text-slate-300">Events Detected</div>
                             </div>
                           </div>
                           
@@ -311,10 +311,10 @@ export default function SourcesPage() {
       ) : (
         <div className="text-center py-16">
           <div className="w-16 h-16 rounded-2xl bg-white/5 border border-white/10 flex items-center justify-center mx-auto mb-4">
-            <FolderOpen size={32} className="text-slate-600" />
+            <FolderOpen size={32} className="text-slate-300" />
           </div>
           <p className="text-slate-400 font-medium mb-1">No sources found</p>
-          <p className="text-slate-600 text-sm mb-4">
+          <p className="text-slate-300 text-sm mb-4">
             {search ? "Try adjusting your search" : "Upload documents to start building your memory"}
           </p>
           {!search && (

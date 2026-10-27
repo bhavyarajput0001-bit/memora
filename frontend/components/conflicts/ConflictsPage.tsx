@@ -36,7 +36,7 @@ export default function ConflictsPage() {
           <h1 className="text-2xl font-bold text-white mb-1">Conflicts</h1>
           <p className="text-slate-400">Information that doesn't fully agree</p>
         </div>
-        <div className="flex items-center gap-2 text-xs text-slate-500">
+        <div className="flex items-center gap-2 text-xs text-slate-300">
           <span className="px-2.5 py-1 bg-rose-500/10 text-rose-400 rounded-lg border border-rose-500/20">{conflicts.filter(c => !c.resolution).length} unresolved</span>
           <span className="px-2.5 py-1 bg-emerald-500/10 text-emerald-400 rounded-lg border border-emerald-500/20">{conflicts.filter(c => c.resolution).length} resolved</span>
         </div>
@@ -71,13 +71,13 @@ export default function ConflictsPage() {
               <div className="grid grid-cols-2 gap-4">
                 <div className="p-4 bg-rose-500/5 border border-rose-500/20 rounded-xl">
                   <div className="text-2xl font-bold text-rose-400 mb-1">{conflict.fact_a.value}</div>
-                  <div className="text-xs text-slate-500">{conflict.fact_a.source}</div>
-                  <div className="text-xs text-slate-600 mt-1">{conflict.fact_a.date}</div>
+                  <div className="text-xs text-slate-300">{conflict.fact_a.source}</div>
+                  <div className="text-xs text-slate-300 mt-1">{conflict.fact_a.date}</div>
                 </div>
                 <div className="p-4 bg-emerald-500/5 border border-emerald-500/20 rounded-xl">
                   <div className="text-2xl font-bold text-emerald-400 mb-1">{conflict.fact_b.value}</div>
-                  <div className="text-xs text-slate-500">{conflict.fact_b.source}</div>
-                  <div className="text-xs text-slate-600 mt-1">{conflict.fact_b.date}</div>
+                  <div className="text-xs text-slate-300">{conflict.fact_b.source}</div>
+                  <div className="text-xs text-slate-300 mt-1">{conflict.fact_b.date}</div>
                 </div>
               </div>
 
@@ -94,7 +94,7 @@ export default function ConflictsPage() {
         <div className="text-center py-12">
           <CheckCircle size={48} className="mx-auto text-emerald-500 mb-4" />
           <p className="text-slate-400">No conflicts detected</p>
-          <p className="text-slate-600 text-sm mt-1">All your memories are consistent</p>
+          <p className="text-slate-300 text-sm mt-1">All your memories are consistent</p>
         </div>
       )}
     </div>

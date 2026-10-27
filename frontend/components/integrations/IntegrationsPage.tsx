@@ -126,7 +126,7 @@ export default function IntegrationsPage() {
               <div className="text-2xl font-bold text-white">
                 {integrations.filter(i => i.connected).length}
               </div>
-              <div className="text-xs text-slate-500">Connected</div>
+              <div className="text-xs text-slate-300">Connected</div>
             </div>
           </div>
         </div>
@@ -137,7 +137,7 @@ export default function IntegrationsPage() {
             </div>
             <div>
               <div className="text-2xl font-bold text-white">Auto</div>
-              <div className="text-xs text-slate-500">Sync Mode</div>
+              <div className="text-xs text-slate-300">Sync Mode</div>
             </div>
           </div>
         </div>
@@ -148,7 +148,7 @@ export default function IntegrationsPage() {
             </div>
             <div>
               <div className="text-2xl font-bold text-white">Secure</div>
-              <div className="text-xs text-slate-500">Encrypted</div>
+              <div className="text-xs text-slate-300">Encrypted</div>
             </div>
           </div>
         </div>
@@ -156,7 +156,7 @@ export default function IntegrationsPage() {
 
       {/* Integrations Grid */}
       <div>
-        <h2 className="text-sm font-semibold text-slate-500 uppercase tracking-wider mb-4">Available Integrations</h2>
+        <h2 className="text-sm font-semibold text-slate-300 uppercase tracking-wider mb-4">Available Integrations</h2>
         <div className="grid grid-cols-2 gap-4">
           {integrations.map((integration, index) => (
             <motion.div
@@ -177,7 +177,7 @@ export default function IntegrationsPage() {
                   </div>
                   <div>
                     <h3 className="font-semibold text-white">{integration.name}</h3>
-                    <p className="text-xs text-slate-500 mt-0.5">{integration.description}</p>
+                    <p className="text-xs text-slate-300 mt-0.5">{integration.description}</p>
                   </div>
                 </div>
                 {integration.connected && (
@@ -215,13 +215,13 @@ export default function IntegrationsPage() {
           </div>
           <div>
             <h3 className="font-semibold text-white">MCP Server Configuration</h3>
-            <p className="text-xs text-slate-500">Connect custom Model Context Protocol servers</p>
+            <p className="text-xs text-slate-300">Connect custom Model Context Protocol servers</p>
           </div>
         </div>
         
         <div className="space-y-4">
           <div>
-            <label className="block text-xs text-slate-500 mb-2">Server URL</label>
+            <label className="block text-xs text-slate-300 mb-2">Server URL</label>
             <input
               type="text"
               placeholder="http://localhost:3000"
@@ -246,7 +246,7 @@ export default function IntegrationsPage() {
         <div className="space-y-3">
           <div className="flex items-center justify-between py-2 border-b border-white/5">
             <span className="text-sm text-slate-400">Last sync</span>
-            <span className="text-sm text-slate-500">Never</span>
+            <span className="text-sm text-slate-300">Never</span>
           </div>
           <div className="flex items-center justify-between py-2 border-b border-white/5">
             <span className="text-sm text-slate-400">Sync interval</span>
@@ -254,7 +254,7 @@ export default function IntegrationsPage() {
           </div>
           <div className="flex items-center justify-between py-2">
             <span className="text-sm text-slate-400">Status</span>
-            <span className="flex items-center gap-2 text-sm text-slate-500">
+            <span className="flex items-center gap-2 text-sm text-slate-300">
               <WifiOff size={14} /> No connections
             </span>
           </div>
