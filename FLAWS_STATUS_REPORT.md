@@ -1,7 +1,7 @@
 # Memora Project: Flaws Analysis & Status Report
 
 **Last Updated:** October 24, 2026  
-**Current Deployment:** https://memora-5qa45dczf-bhavyarajput0001-bits-projects.vercel.app  
+**Current Deployment:** https://memora-phgir8q4n-bhavyarajput0001-bits-projects.vercel.app  
 **GitHub Repository:** https://github.com/bhavyarajput0001-bit/memora
 
 ---
@@ -216,7 +216,7 @@ ee18d4a Update .gitIgnore
 **Remaining (2/5 fixes + accessibility):**
 - ⏳ Full accessibility enhancements (modal focus trapping, complete ARIA coverage) (focus trapping, complete ARIA, keyboard shortcuts)
 
-**Deployed URL:** https://memora-5qa45dczf-bhavyarajput0001-bits-projects.vercel.app
+**Deployed URL:** https://memora-phgir8q4n-bhavyarajput0001-bits-projects.vercel.app
 
 **Backend Required:** Python FastAPI at `http://127.0.0.1:8000` for full feature access (calendar events, graph data)
 
