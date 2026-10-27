@@ -92,10 +92,24 @@
 
 ## ⏳ REMAINING FLAWS TO BE DONE (Fixes #4-#5 + Full Accessibility)
 
-### Fix #4: Consolidate API Calls
-**Priority:** High - affects all users
+### Fix #4: Consolidate API Calls + Security Hardening ✅
+**Status:** Complete and deployed
 
-**Problem:** Dashboard makes 5+ sequential API calls (`getMemoryStats`, `getTimeline(7)`, `getTimeline(30)`, `getConflicts()`, `getFacts()`) each triggering separate loading states, causing noticeable delays and layout shifts.
+**Security Fixes Applied:**
+- Added Content-Security-Policy headers to next.config.ts
+- Replaced 9 hardcoded backend URLs with API client
+- Added Zod input validation to /api/v1/events and /api/v1/query
+- Added X-Frame-Options, X-Content-Type-Options, Referrer-Policy headers
+- Improved error handling with structured error responses
+
+**API Consolidation:**
+- Created consolidated /api/v1/dashboard endpoint
+- Reduced Dashboard from 4 sequential API calls to 1
+- Added fallback with Promise.allSettled
+- Added event CRUD methods to API client
+
+**Files Modified:** 11
+**Total Security Issues Fixed:** 14 (`getMemoryStats`, `getTimeline(7)`, `getTimeline(30)`, `getConflicts()`, `getFacts()`) each triggering separate loading states, causing noticeable delays and layout shifts.
 
 **Solution Plan:**
 - Consolidate related data into single backend endpoints
